@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
+    <url>
+        <loc>
+            http://danieldyba.com/blog/2011/10/16/using-bundle-install-in-a-rails-3-generator/
+        </loc>
+        <lastmod>2011-10-16T00:15:39-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://danieldyba.com/blog/archives/</loc>
+        <lastmod>2011-10-16T00:15:39-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://danieldyba.com/</loc>
+        <lastmod>2011-10-16T00:15:39-07:00</lastmod>
+    </url>
+</urlset>
