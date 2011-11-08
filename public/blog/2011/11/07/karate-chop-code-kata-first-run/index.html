@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Daniel Dyba</title>
+  <title>Karate Chop Code Kata - First Run - Daniel Dyba</title>
   <meta name="author" content="Daniel Dyba">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://danieldyba.com/">
+  <link rel="canonical" href="http://danieldyba.com/blog/2011/11/07/karate-chop-code-kata-first-run/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -58,15 +58,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2011/11/07/karate-chop-code-kata-first-run/">Karate Chop Code Kata - First Run</a></h1>
+      <h1 class="entry-title">Karate Chop Code Kata - First Run</h1>
     
     
       <p class="meta">
@@ -87,7 +84,7 @@
   </header>
 
 
-  <div class="entry-content"><h2>The Idea</h2>
+<div class="entry-content"><h2>The Idea</h2>
 
 <p>Here is my first attempt at Code Kata #2 - Karate Chop, which is an exercise you can find on Dave Thomas&#8217; website <a href="http://codekata.pragprog.com/2007/01/kata_two_karate.html">Code Kata</a>. Now mind you, I never had a formal introduction to computer algorithms. I had to look at a computer algorithms book to make sure I understood what was meant by the term binary search routine. The idea behind Karate Chop is to write a binary search routine that takes an integer and an array, splits the array in two, determines which half of the array the integer should be on and repeats the process until it finds the integer and returns it or doesn&#8217;t find it and returns a <code>-1</code>. In the end I should have a function that can be described as follows:</p>
 
@@ -220,22 +217,16 @@
 
 <p>This exercise took me somewhere close to 8 hours. I&#8217;m hoping to cut my time in half in the next implementation. Stick around as I try to solve this again using a different implementation.</p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/10/16/using-bundle-install-in-a-rails-3-generator/">Using &#8216;Bundle Install&#8217; in a Rails 3 Generator</a></h1>
-    
-    
-      <p class="meta">
-        
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Daniel Dyba</span></span>
+
+      
 
 
 
@@ -245,91 +236,33 @@
 
 
 
-<time datetime="2011-10-16T00:04:00-07:00" pubdate  data-updated="true" >Oct 16<span>th</span>, 2011</time>
-        
-      </p>
+<time datetime="2011-11-07T18:40:00-08:00" pubdate  data-updated="true" >Nov 7<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/code-kata/'>Code Kata</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+  
+</span>
+
+
+    </p>
     
-  </header>
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://danieldyba.com/blog/2011/11/07/karate-chop-code-kata-first-run/" data-via="dyba" data-counturl="http://danieldyba.com/blog/2011/11/07/karate-chop-code-kata-first-run/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+</div>
 
-
-  <div class="entry-content"><h3>Problem</h3>
-
-<p>I came across Rails issue <a href="https://github.com/rails/rails/issues/3153">#3153</a> on Github which involved someone thinking <code>bundle install</code> didn&#8217;t work with Rails generators.</p>
-
-<p>When working with Rails generators it&#8217;s important to remember that generators use Yehuda Katz&#8217;s Thor gem. The issue arose because the user tried to run the command <code>bundle install</code> from inside the directory in which the generator file had been created.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">SomegenGenerator</span> <span class="o">&lt;</span> <span class="no">Rails</span><span class="o">::</span><span class="no">Generators</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'> <span class="n">source_root</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;../templates&#39;</span><span class="p">,</span> <span class="bp">__FILE__</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'> <span class="k">def</span> <span class="nf">install</span>
-</span><span class='line'>   <span class="n">gem</span> <span class="s2">&quot;unicorn&quot;</span>
-</span><span class='line'>   <span class="n">run</span> <span class="s2">&quot;bundle install&quot;</span>
-</span><span class='line'> <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Solution</h3>
-
-<p>Again, the issue is that the command <code>bundle install</code> is being run from inside the directory <code>Issue3153/lib/generators/something/</code>. I&#8217;ll let you take a quick look at the Thor source code at <a href="https://github.com/wycats/thor/blob/master/lib/thor/actions.rb#L161">lib/thor/actions.rb</a>. As you have now seen, we can use the <code>inside</code> method to run the <code>bundle install</code> command from the root directory of our app Issue3153.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Issue3153/lib/generators/something/something_generator.rb</span>
-</span><span class='line'><span class="k">class</span> <span class="nc">SomethingGenerator</span> <span class="o">&lt;</span> <span class="no">Rails</span><span class="o">::</span><span class="no">Generators</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'>  <span class="n">source_root</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;../templates&#39;</span><span class="p">,</span> <span class="bp">__FILE__</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">install</span>
-</span><span class='line'>    <span class="n">gem</span> <span class="s2">&quot;unicorn&quot;</span>
-</span><span class='line'>    <span class="n">inside</span> <span class="no">Rails</span><span class="o">.</span><span class="n">root</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">run</span> <span class="s2">&quot;bundle install&quot;</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This now works!</p>
-
-<h3>Take Aways</h3>
-
-<ul>
-<li>Rails generators use Thor Actions</li>
-<li>The bundle install command must be run in the directory where the Gemfile of interest resides</li>
-</ul>
+    
+  </footer>
+</article>
 
 </div>
-  
-  
 
-
-    </article>
-  
-  <nav class="pagination">
-    <div>
-      
-      <a href="/blog/archives">Blog Archives</a>
-      
-    </div>
-  </nav>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -341,7 +274,7 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2011/10/16/using-bundle-install-in-a-rails-3-generator/">Using &#8216;Bundle Install&#8217; in a Rails 3 Generator</a>
+        <a href="/blog/2011/10/16/using-bundle-install-in-a-rails-3-generator/">Using 'Bundle Install' in a Rails 3 Generator</a>
       </li>
     
   </ul>
@@ -350,7 +283,7 @@
 <section>
   <h1>Github Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/dyba">@dyba</a> on Github
@@ -380,7 +313,7 @@
 <section>
   <h1>Latest Tweets</h1>
   <ul id="tweets">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   <script type="text/javascript">
     $.domReady(function(){
@@ -397,6 +330,7 @@
 
   
 </aside>
+
 
     </div>
   </div>

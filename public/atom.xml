@@ -4,7 +4,7 @@
   <title><![CDATA[Daniel Dyba]]></title>
   <link href="http://danieldyba.com/atom.xml" rel="self"/>
   <link href="http://danieldyba.com/"/>
-  <updated>2011-10-16T00:19:11-07:00</updated>
+  <updated>2011-11-07T19:14:13-08:00</updated>
   <id>http://danieldyba.com/</id>
   <author>
     <name><![CDATA[Daniel Dyba]]></name>
@@ -12,6 +12,146 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Karate Chop Code Kata - First Run]]></title>
+    <link href="http://danieldyba.com/blog/2011/11/07/karate-chop-code-kata-first-run/"/>
+    <updated>2011-11-07T18:40:00-08:00</updated>
+    <id>http://danieldyba.com/blog/2011/11/07/karate-chop-code-kata-first-run</id>
+    <content type="html"><![CDATA[<h2>The Idea</h2>
+
+<p>Here is my first attempt at Code Kata #2 - Karate Chop, which is an exercise you can find on Dave Thomas&#8217; website <a href="http://codekata.pragprog.com/2007/01/kata_two_karate.html">Code Kata</a>. Now mind you, I never had a formal introduction to computer algorithms. I had to look at a computer algorithms book to make sure I understood what was meant by the term binary search routine. The idea behind Karate Chop is to write a binary search routine that takes an integer and an array, splits the array in two, determines which half of the array the integer should be on and repeats the process until it finds the integer and returns it or doesn&#8217;t find it and returns a <code>-1</code>. In the end I should have a function that can be described as follows:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">chop</span><span class="p">(</span><span class="n">integer</span><span class="p">,</span> <span class="n">array_of_integers</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">integer</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The integer it returns should be the index of the array in which I found the matching number. In the event that I do not find the integer in the array, I should get a <code>-1</code>.</p>
+
+<h2>The Solution</h2>
+
+<figure class='code'><figcaption><span>Karate Chop Code Kata - First Run </span><a href='https://github.com/dyba/katas-samples/blob/master/karate_chop/karate_chop.rb'>See On Github</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">chop</span><span class="p">(</span><span class="n">int</span><span class="p">,</span><span class="n">array_of_int</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">array_of_int</span><span class="o">.</span><span class="n">empty?</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">min</span><span class="p">,</span> <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">array_of_int</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="n">midpoint</span> <span class="o">=</span> <span class="n">max</span> <span class="o">/</span> <span class="mi">2</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">while</span> <span class="n">int</span> <span class="o">!=</span> <span class="n">array_of_int</span><span class="o">[</span><span class="n">midpoint</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="n">int</span> <span class="o">&lt;</span> <span class="n">array_of_int</span><span class="o">[</span><span class="n">midpoint</span><span class="o">]</span>
+</span><span class='line'>      <span class="n">max</span> <span class="o">=</span> <span class="n">midpoint</span> <span class="o">-</span> <span class="mi">1</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="n">min</span> <span class="o">=</span> <span class="n">midpoint</span> <span class="o">+</span> <span class="mi">1</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">midpoint</span> <span class="o">=</span> <span class="n">min</span> <span class="o">+</span> <span class="p">(</span><span class="n">max</span> <span class="o">-</span> <span class="n">min</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+</span><span class='line'>    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">max</span> <span class="o">&lt;</span> <span class="n">min</span> <span class="o">||</span> <span class="n">min</span> <span class="o">&gt;</span> <span class="n">midpoint</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">midpoint</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>The Walkthrough</h2>
+
+<h3>Edge Cases</h3>
+
+<p>I implement the binary search routine using a while loop. I address the the edge case when the array is empty. When that hapens, I know that I must return <code>-1</code> because no integer will ever be present in an empty array.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">array_of_int</span><span class="o">.</span><span class="n">empty?</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Markers Point You In the Right Direction</h3>
+
+<p>In this solution, I use markers to let me know what portion of the array I am focusing on. I start off by initializing my markers. I have a min marker which tells me the first element of the array, and I have a max marker which tells me the last element of the array. The midpoint marker tells me which index is the midpoint of the array. These markers will change during the course of the program as I search through smaller subsections of the array.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">min</span><span class="p">,</span> <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">array_of_int</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="n">midpoint</span> <span class="o">=</span> <span class="n">max</span> <span class="o">/</span> <span class="mi">2</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>The Search Is On</h3>
+
+<p>Now comes the interesting part, the loop construct. I decided to use the while loop to iterate through the array because it was the first solution that came to mind. Only if I found the matching integer would I exit the while loop and return the index of the array in which I found the matching number.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">while</span> <span class="n">int</span> <span class="o">!=</span> <span class="n">array_of_int</span><span class="o">[</span><span class="n">midpoint</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Inside the while loop, I check for the condition where the integer I seek is less than the integer I find at the midpoint of the array. If it is less, then I move my max marker to 1 less than the midpoint; if more, then I move my min marker to 1 more than the midpoint. This is easily illustrated with a diagram.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">if</span> <span class="n">int</span> <span class="o">&lt;</span> <span class="n">array_of_int</span><span class="o">[</span><span class="n">midpoint</span><span class="o">]</span>
+</span><span class='line'>  <span class="n">max</span> <span class="o">=</span> <span class="n">midpoint</span> <span class="o">-</span> <span class="mi">1</span>
+</span><span class='line'><span class="k">else</span>
+</span><span class='line'>  <span class="n">min</span> <span class="o">=</span> <span class="n">midpoint</span> <span class="o">+</span> <span class="mi">1</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Notice that with each iteration, I am focusing on a smaller portion of the array. After the if-else construct, I advance the midpoint marker to reflect the new midpoint for the smaller portion of the array that I am focusing on.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">midpoint</span> <span class="o">=</span> <span class="n">min</span> <span class="o">+</span> <span class="p">(</span><span class="n">max</span> <span class="o">-</span> <span class="n">min</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>When Markers Go Wrong</h3>
+
+<p>Here is where it gets tricky. A strange thing happens when the integer is not present in the array: the max, min, and midpoint markers go berserk! They no longer begin to make sense. That&#8217;s when I know it&#8217;s time to jump out of the loop and return a <code>-1</code> to indicate that there was no matching integer inside the array.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">max</span> <span class="o">&lt;</span> <span class="n">min</span> <span class="o">||</span> <span class="n">min</span> <span class="o">&gt;</span> <span class="n">midpoint</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, the last line returns the index of the array that matched the integer I passed to the function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">midpoint</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>A Final Note</h2>
+
+<p>Don&#8217;t let my explanation fool you, this was a difficult exercise for me. At first I was thinking about chopping the array in half and then searching through each half iterating through each element one by one to see if I found the integer. That wasn&#8217;t the correct way to go about it; it would have been an incorrect implementation of a binary search. When you come across unfamiliar terms, you must start by understanding those terms before you can tackle a problem. My problem was that I didn&#8217;t understand the idea of a binary search.</p>
+
+<p>This exercise took me somewhere close to 8 hours. I&#8217;m hoping to cut my time in half in the next implementation. Stick around as I try to solve this again using a different implementation.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Using 'Bundle Install' in a Rails 3 Generator]]></title>
