@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Daniel Dyba</title>
+  <title>Karate Chop Code Kata - Second Run - Daniel Dyba</title>
   <meta name="author" content="Daniel Dyba">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://danieldyba.com/">
+  <link rel="canonical" href="http://danieldyba.com/blog/2011/11/11/karate-chop-code-kata-second-run/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -58,15 +58,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2011/11/11/karate-chop-code-kata-second-run/">Karate Chop Code Kata - Second Run</a></h1>
+      <h1 class="entry-title">Karate Chop Code Kata - Second Run</h1>
     
     
       <p class="meta">
@@ -87,7 +84,7 @@
   </header>
 
 
-  <div class="entry-content"><h2>Several Attempts With No Solution In Sight</h2>
+<div class="entry-content"><h2>Several Attempts With No Solution In Sight</h2>
 
 <p>The second run at implementing the binary chop method was excruciating. After several attempts, I finally decided to check out what others were doing. Was I blinded to a particular kind of solution I had in mind? Was my understanding of recursion incorrect? I felt I probably had a blind spot that was keeping me from seeing the problem in a new way. After going out on a Google search for the solution, I came across <a href="http://softwareramblings.com/2009/11/codekata-kata-two-solution.html">Stephen Doyle&#8217;s Blog</a></p>
 
@@ -279,22 +276,16 @@
 
 <p>Let&#8217;s see how well I fare solving it in that style.</p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/11/07/karate-chop-code-kata-first-run/">Karate Chop Code Kata - First Run</a></h1>
-    
-    
-      <p class="meta">
-        
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Daniel Dyba</span></span>
+
+      
 
 
 
@@ -304,256 +295,33 @@
 
 
 
-<time datetime="2011-11-07T18:40:00-08:00" pubdate  data-updated="true" >Nov 7<span>th</span>, 2011</time>
-        
-      </p>
+<time datetime="2011-11-11T12:41:00-08:00" pubdate  data-updated="true" >Nov 11<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/code-kata/'>Code Kata</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+  
+</span>
+
+
+    </p>
     
-  </header>
-
-
-  <div class="entry-content"><h2>The Idea</h2>
-
-<p>Here is my first attempt at Code Kata #2 - Karate Chop, which is an exercise you can find on Dave Thomas&#8217; website <a href="http://codekata.pragprog.com/2007/01/kata_two_karate.html">Code Kata</a>. Now mind you, I never had a formal introduction to computer algorithms. I had to look at a computer algorithms book to make sure I understood what was meant by the term binary search routine. The idea behind Karate Chop is to write a binary search routine that takes an integer and an array, splits the array in two, determines which half of the array the integer should be on and repeats the process until it finds the integer and returns it or doesn&#8217;t find it and returns a <code>-1</code>. In the end I should have a function that can be described as follows:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">chop</span><span class="p">(</span><span class="n">integer</span><span class="p">,</span> <span class="n">array_of_integers</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">integer</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The integer it returns should be the index of the array in which I found the matching number. In the event that I do not find the integer in the array, I should get a <code>-1</code>.</p>
-
-<h2>The Solution</h2>
-
-<figure class='code'><figcaption><span>Karate Chop Code Kata - First Run </span><a href='https://github.com/dyba/katas-samples/blob/master/karate_chop/karate_chop.rb'>See On Github</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">chop</span><span class="p">(</span><span class="n">int</span><span class="p">,</span><span class="n">array_of_int</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">array_of_int</span><span class="o">.</span><span class="n">empty?</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">min</span><span class="p">,</span> <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">array_of_int</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span>
-</span><span class='line'>  <span class="n">midpoint</span> <span class="o">=</span> <span class="n">max</span> <span class="o">/</span> <span class="mi">2</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">while</span> <span class="n">int</span> <span class="o">!=</span> <span class="n">array_of_int</span><span class="o">[</span><span class="n">midpoint</span><span class="o">]</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">if</span> <span class="n">int</span> <span class="o">&lt;</span> <span class="n">array_of_int</span><span class="o">[</span><span class="n">midpoint</span><span class="o">]</span>
-</span><span class='line'>      <span class="n">max</span> <span class="o">=</span> <span class="n">midpoint</span> <span class="o">-</span> <span class="mi">1</span>
-</span><span class='line'>    <span class="k">else</span>
-</span><span class='line'>      <span class="n">min</span> <span class="o">=</span> <span class="n">midpoint</span> <span class="o">+</span> <span class="mi">1</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">midpoint</span> <span class="o">=</span> <span class="n">min</span> <span class="o">+</span> <span class="p">(</span><span class="n">max</span> <span class="o">-</span> <span class="n">min</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-</span><span class='line'>    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">max</span> <span class="o">&lt;</span> <span class="n">min</span> <span class="o">||</span> <span class="n">min</span> <span class="o">&gt;</span> <span class="n">midpoint</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">midpoint</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>The Walkthrough</h2>
-
-<h3>Edge Cases</h3>
-
-<p>I implement the binary search routine using a while loop. I address the the edge case when the array is empty. When that hapens, I know that I must return <code>-1</code> because no integer will ever be present in an empty array.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">array_of_int</span><span class="o">.</span><span class="n">empty?</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Markers Point You In the Right Direction</h3>
-
-<p>In this solution, I use markers to let me know what portion of the array I am focusing on. I start off by initializing my markers. I have a min marker which tells me the first element of the array, and I have a max marker which tells me the last element of the array. The midpoint marker tells me which index is the midpoint of the array. These markers will change during the course of the program as I search through smaller subsections of the array.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">min</span><span class="p">,</span> <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">array_of_int</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span>
-</span><span class='line'>  <span class="n">midpoint</span> <span class="o">=</span> <span class="n">max</span> <span class="o">/</span> <span class="mi">2</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>The Search Is On</h3>
-
-<p>Now comes the interesting part, the loop construct. I decided to use the while loop to iterate through the array because it was the first solution that came to mind. Only if I found the matching integer would I exit the while loop and return the index of the array in which I found the matching number.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">while</span> <span class="n">int</span> <span class="o">!=</span> <span class="n">array_of_int</span><span class="o">[</span><span class="n">midpoint</span><span class="o">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Inside the while loop, I check for the condition where the integer I seek is less than the integer I find at the midpoint of the array. If it is less, then I move my max marker to 1 less than the midpoint; if more, then I move my min marker to 1 more than the midpoint. This is easily illustrated with a diagram.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">if</span> <span class="n">int</span> <span class="o">&lt;</span> <span class="n">array_of_int</span><span class="o">[</span><span class="n">midpoint</span><span class="o">]</span>
-</span><span class='line'>  <span class="n">max</span> <span class="o">=</span> <span class="n">midpoint</span> <span class="o">-</span> <span class="mi">1</span>
-</span><span class='line'><span class="k">else</span>
-</span><span class='line'>  <span class="n">min</span> <span class="o">=</span> <span class="n">midpoint</span> <span class="o">+</span> <span class="mi">1</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Notice that with each iteration, I am focusing on a smaller portion of the array. After the if-else construct, I advance the midpoint marker to reflect the new midpoint for the smaller portion of the array that I am focusing on.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">midpoint</span> <span class="o">=</span> <span class="n">min</span> <span class="o">+</span> <span class="p">(</span><span class="n">max</span> <span class="o">-</span> <span class="n">min</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>When Markers Go Wrong</h3>
-
-<p>Here is where it gets tricky. A strange thing happens when the integer is not present in the array: the max, min, and midpoint markers go berserk! They no longer begin to make sense. That&#8217;s when I know it&#8217;s time to jump out of the loop and return a <code>-1</code> to indicate that there was no matching integer inside the array.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">max</span> <span class="o">&lt;</span> <span class="n">min</span> <span class="o">||</span> <span class="n">min</span> <span class="o">&gt;</span> <span class="n">midpoint</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Finally, the last line returns the index of the array that matched the integer I passed to the function.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">midpoint</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>A Final Note</h2>
-
-<p>Don&#8217;t let my explanation fool you, this was a difficult exercise for me. At first I was thinking about chopping the array in half and then searching through each half iterating through each element one by one to see if I found the integer. That wasn&#8217;t the correct way to go about it; it would have been an incorrect implementation of a binary search. When you come across unfamiliar terms, you must start by understanding those terms before you can tackle a problem. My problem was that I didn&#8217;t understand the idea of a binary search.</p>
-
-<p>This exercise took me somewhere close to 8 hours. I&#8217;m hoping to cut my time in half in the next implementation. Stick around as I try to solve this again using a different implementation.</p>
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://danieldyba.com/blog/2011/11/11/karate-chop-code-kata-second-run/" data-via="dyba" data-counturl="http://danieldyba.com/blog/2011/11/11/karate-chop-code-kata-second-run/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
 </div>
-  
-  
 
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
     
-      <h1 class="entry-title"><a href="/blog/2011/10/16/using-bundle-install-in-a-rails-3-generator/">Using &#8216;Bundle Install&#8217; in a Rails 3 Generator</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-10-16T00:04:00-07:00" pubdate  data-updated="true" >Oct 16<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Problem</h3>
-
-<p>I came across Rails issue <a href="https://github.com/rails/rails/issues/3153">#3153</a> on Github which involved someone thinking <code>bundle install</code> didn&#8217;t work with Rails generators.</p>
-
-<p>When working with Rails generators it&#8217;s important to remember that generators use Yehuda Katz&#8217;s Thor gem. The issue arose because the user tried to run the command <code>bundle install</code> from inside the directory in which the generator file had been created.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">SomegenGenerator</span> <span class="o">&lt;</span> <span class="no">Rails</span><span class="o">::</span><span class="no">Generators</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'> <span class="n">source_root</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;../templates&#39;</span><span class="p">,</span> <span class="bp">__FILE__</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'> <span class="k">def</span> <span class="nf">install</span>
-</span><span class='line'>   <span class="n">gem</span> <span class="s2">&quot;unicorn&quot;</span>
-</span><span class='line'>   <span class="n">run</span> <span class="s2">&quot;bundle install&quot;</span>
-</span><span class='line'> <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Solution</h3>
-
-<p>Again, the issue is that the command <code>bundle install</code> is being run from inside the directory <code>Issue3153/lib/generators/something/</code>. I&#8217;ll let you take a quick look at the Thor source code at <a href="https://github.com/wycats/thor/blob/master/lib/thor/actions.rb#L161">lib/thor/actions.rb</a>. As you have now seen, we can use the <code>inside</code> method to run the <code>bundle install</code> command from the root directory of our app Issue3153.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Issue3153/lib/generators/something/something_generator.rb</span>
-</span><span class='line'><span class="k">class</span> <span class="nc">SomethingGenerator</span> <span class="o">&lt;</span> <span class="no">Rails</span><span class="o">::</span><span class="no">Generators</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'>  <span class="n">source_root</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;../templates&#39;</span><span class="p">,</span> <span class="bp">__FILE__</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">install</span>
-</span><span class='line'>    <span class="n">gem</span> <span class="s2">&quot;unicorn&quot;</span>
-</span><span class='line'>    <span class="n">inside</span> <span class="no">Rails</span><span class="o">.</span><span class="n">root</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">run</span> <span class="s2">&quot;bundle install&quot;</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This now works!</p>
-
-<h3>Take Aways</h3>
-
-<ul>
-<li>Rails generators use Thor Actions</li>
-<li>The bundle install command must be run in the directory where the Gemfile of interest resides</li>
-</ul>
+  </footer>
+</article>
 
 </div>
-  
-  
 
-
-    </article>
-  
-  <nav class="pagination">
-    <div>
-      
-      <a href="/blog/archives">Blog Archives</a>
-      
-    </div>
-  </nav>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -569,7 +337,7 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2011/10/16/using-bundle-install-in-a-rails-3-generator/">Using &#8216;Bundle Install&#8217; in a Rails 3 Generator</a>
+        <a href="/blog/2011/10/16/using-bundle-install-in-a-rails-3-generator/">Using 'Bundle Install' in a Rails 3 Generator</a>
       </li>
     
   </ul>
@@ -578,7 +346,7 @@
 <section>
   <h1>Github Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/dyba">@dyba</a> on Github
@@ -608,7 +376,7 @@
 <section>
   <h1>Latest Tweets</h1>
   <ul id="tweets">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   <script type="text/javascript">
     $.domReady(function(){
@@ -625,6 +393,7 @@
 
   
 </aside>
+
 
     </div>
   </div>
