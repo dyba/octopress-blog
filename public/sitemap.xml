@@ -15,11 +15,17 @@
         <lastmod>2011-11-11T13:14:01-08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://danieldyba.com/blog/2011/11/13/ruby-monk-problem-capitalizing-an-array-of-names/
+        </loc>
+        <lastmod>2011-11-13T12:28:56-08:00</lastmod>
+    </url>
+    <url>
         <loc>http://danieldyba.com/blog/archives/</loc>
-        <lastmod>2011-11-11T13:14:01-08:00</lastmod>
+        <lastmod>2011-11-13T12:28:56-08:00</lastmod>
     </url>
     <url>
         <loc>http://danieldyba.com/</loc>
-        <lastmod>2011-11-11T13:14:01-08:00</lastmod>
+        <lastmod>2011-11-13T12:28:56-08:00</lastmod>
     </url>
 </urlset>

@@ -9,7 +9,7 @@
   <meta name="author" content="Daniel Dyba">
 
   
-  <meta name="description" content="Several Attempts With No Solution In SightThe second run at implementing the binary chop method was excruciating. After several attempts, I finally...">
+  <meta name="description" content="The ExerciseIn lesson 5 of RubyMonk.com, there&#8217;s an exercise with the following objective:to capitalize the first character of each part of t...">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -60,6 +60,103 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/11/13/ruby-monk-problem-capitalizing-an-array-of-names/">Ruby Monk Problem - Capitalizing an Array of Names</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-11-13T12:09:00-08:00" pubdate  data-updated="true" >Nov 13<span>th</span>, 2011</time>
+        
+         | <a href="/blog/2011/11/13/ruby-monk-problem-capitalizing-an-array-of-names/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>The Exercise</h2>
+
+<p>In lesson 5 of <a href="http://rubymonk.com">RubyMonk.com</a>, there&#8217;s an exercise with the following objective:</p>
+
+<blockquote><p>to capitalize the first character of each part of the name as it combined them.</p></blockquote>
+
+
+<p>The code they provide is:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># bust out a beefy reduce on this bad boy:</span>
+</span><span class='line'><span class="o">[</span><span class="s2">&quot;emperor&quot;</span><span class="p">,</span> <span class="s2">&quot;joshua&quot;</span><span class="p">,</span> <span class="s2">&quot;abraham&quot;</span><span class="p">,</span> <span class="s2">&quot;norton&quot;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>First Attempt</h3>
+
+<p>I worked out the code below but then realized it didn&#8217;t solve the problem.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="s2">&quot;emperor&quot;</span><span class="p">,</span> <span class="s2">&quot;joshua&quot;</span><span class="p">,</span> <span class="s2">&quot;abraham&quot;</span><span class="p">,</span> <span class="s2">&quot;norton&quot;</span><span class="o">].</span><span class="n">inject</span> <span class="k">do</span> <span class="o">|</span><span class="n">full_name</span><span class="p">,</span> <span class="nb">name</span><span class="o">|</span>
+</span><span class='line'>  <span class="s2">&quot;</span><span class="si">#{</span><span class="n">full_name</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="nb">name</span><span class="o">.</span><span class="n">capitalize</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This ends up with <code>"emperor Joshua Abraham Norton"</code>. I didn&#8217;t capitalize the first word <code>emperor</code>.</p>
+
+<h3>Second Attempt</h3>
+
+<p>Ok, no problem. I&#8217;ll just capitalize <code>full_name</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="s2">&quot;emperor&quot;</span><span class="p">,</span> <span class="s2">&quot;joshua&quot;</span><span class="p">,</span> <span class="s2">&quot;abraham&quot;</span><span class="p">,</span> <span class="s2">&quot;norton&quot;</span><span class="o">].</span><span class="n">inject</span> <span class="k">do</span> <span class="o">|</span><span class="n">full_name</span><span class="p">,</span> <span class="nb">name</span><span class="o">|</span>
+</span><span class='line'>  <span class="s2">&quot;</span><span class="si">#{</span><span class="n">full_name</span><span class="o">.</span><span class="n">capitalize</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="nb">name</span><span class="o">.</span><span class="n">capitalize</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>No. You can&#8217;t do that. That will end up capitalizing just the first word <code>emperor</code>. You will end up with <code>"Emperor joshua abraham Norton"</code>. The reason is the block variable <code>full_name</code> remembers the last value calculated inside the block. Because we did not pass an initial value to the inject method, it uses the first value in your collection by default, in this case <code>"emperor"</code>. Inside the body of the block, we take <code>"emperor"</code> and capitalize it followed by <code>"joshua"</code> and capitalize that. We put the two together to get the complete string <code>"Emperor Joshua"</code>. You can try this out in irb by truncating your array to just two elements, <code>["emperor", "joshua"]</code>.</p>
+
+<p>So far so good. Next, we use this result of the calculation carried out in the body of the block and pass it to the block variable <code>full_name</code>. The block variable <code>name</code> is set to the next item in our collection, which is <code>"abraham"</code>. We run through the body of the block again which leads us to capitalize <code>"Emperor Joshua"</code> and <code>"abraham"</code>. That gives us <code>"Emperor joshua"</code> and <code>"Abraham"</code>. That&#8217;s where things go wrong. When you <code>capitalize</code> a string, you are putting all characters except the first character in their lower case form.</p>
+
+<h3>A Hack</h3>
+
+<p>How then, do you capitalize the first name? By default, <code>inject</code> will use <code>"emperor"</code> as its initial value since I have passed no parameter to the <code>inject</code> method. What if I did try to pass in a parameter? What would that parameter be? What if I passed in an empty string? Ah, in that case, the <code>full_name</code> will be equal to <code>''</code>, the empty string.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="s2">&quot;emperor&quot;</span><span class="p">,</span> <span class="s2">&quot;joshua&quot;</span><span class="p">,</span> <span class="s2">&quot;abraham&quot;</span><span class="p">,</span> <span class="s2">&quot;norton&quot;</span><span class="o">].</span><span class="n">inject</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">full_name</span><span class="p">,</span> <span class="nb">name</span><span class="o">|</span>
+</span><span class='line'>  <span class="s2">&quot;</span><span class="si">#{</span><span class="n">full_name</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="nb">name</span><span class="o">.</span><span class="n">capitalize</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">strip</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If I only made a call to <code>"#{full_name} #{name.capitalize}"</code>, I would have an extra space in front of the name, <code>" Emperor Joshua Abraham Norton"</code>, by the time block iterated through all the items in the array. To get rid of this, I just <code>strip</code> the whitespace. Do you have another of solving this problem with the constraint of using the <code>inject</code> method? I&#8217;d love to hear your ideas.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -565,6 +662,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/11/13/ruby-monk-problem-capitalizing-an-array-of-names/">Ruby Monk Problem - Capitalizing an Array of Names</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2011/11/11/karate-chop-code-kata-second-run/">Karate Chop Code Kata - Second Run</a>
