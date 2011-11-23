@@ -9,7 +9,7 @@
   <meta name="author" content="Daniel Dyba">
 
   
-  <meta name="description" content="Another LookThis is a follow up to my previous blog post on the Ruby Monk problem. The challenge with which I ended that post was to solve the prob...">
+  <meta name="description" content="The goal of this kata is to create a calculator that can add the numbers found in a string. I found this kata on Roy Osherove&#8217;s website. Here...">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -60,6 +60,285 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/11/23/string-calculator-kata-without-if/">String Calculator Kata Without if, Else, Switch, or Case</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-11-23T14:06:00-08:00" pubdate  data-updated="true" >Nov 23<span>rd</span>, 2011</time>
+        
+         | <a href="/blog/2011/11/23/string-calculator-kata-without-if/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The goal of this kata is to create a calculator that can add the numbers found in a string. I found this kata on <a href="http://osherove.com/tdd-kata-1/">Roy Osherove&#8217;s website</a>. Here are the instructions for doing this kata:</p>
+
+<h2>String Calculator Kata Overview</h2>
+
+<h2>The Rules</h2>
+
+<ol>
+<li>Create a simple String calculator with a method <strong>int Add(string numbers)</strong>
+
+<ol>
+<li>The method can take 0, 1, or 2 numbers, and will return their sum (for an empty string it will return 0) for example &#8220;&#8221; or &#8220;1&#8221;, or &#8220;1,2&#8221;</li>
+<li>Start with the simplest test case of an empty string and move to 1 and two numbers</li>
+<li>Remember to solve things as simply as possible so that you force yourself to write tests you did not think about</li>
+<li>Remember to refactor after each passing test</li>
+</ol>
+</li>
+<li>Allow the Add method to handle an unknown amount of numbers</li>
+<li>Allow the Add method to handle new lines between numbers (instead of commas).
+
+<ol>
+<li>The following input is OK: &#8220;1\n2,3&#8221; (will equal 6)</li>
+<li>The following input is NOT OK: &#8220;1,\n&#8221; (not need to price it - just clarifying)</li>
+</ol>
+</li>
+<li>Support different delimiters
+
+<ol>
+<li>To change a delimiter, the beginning of the string will contain a separate  line that looks like this: &#8220;//[delimiter]\n[numbers…]&#8221; for example &#8220;//;\n1;2&#8221; should return three where the default delimiter is &#8216;;&#8217;.</li>
+</ol>
+</li>
+</ol>
+
+
+<p>There are more instructions to this kata but that was as far as I was able to get without going too far over the time limit. I imposed a 30 minute time limit to complete this kata.</p>
+
+<h3>Constraints Inspire Creative-Thinking</h3>
+
+<p>I want to make a very important observation here. I could have solved this kata with programming techniques with which I am familiar; however, familiarity does not breed creativity. If you want to take your creativity to the next level, you need to put constraints. Constraints are your friends. They are the ones that prod you to think about novel ways of doing things. In this kata, I added the constraint of avoiding these keywords:</p>
+
+<ul>
+<li>  <code>if</code></li>
+<li>  <code>else</code></li>
+<li>  <code>switch</code></li>
+<li>  <code>case</code></li>
+</ul>
+
+
+<p>It&#8217;s amazing what you&#8217;ll discover when you impose these constraints. I began to write my solution in a Lispy sort of fashion as you&#8217;ll soon see.</p>
+
+<h2>The Completed Kata</h2>
+
+<figure class='code'><figcaption><span>The Completed String Calculator Kata</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rspec&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">StringCalculator</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">string</span><span class="o">.</span><span class="n">empty?</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="k">return</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">string</span><span class="o">.</span><span class="n">end_with?</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="k">return</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">string</span><span class="o">.</span><span class="n">start_with?</span><span class="p">(</span><span class="s2">&quot;//&quot;</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+</span><span class='line'>      <span class="p">(</span><span class="vi">@delimiter</span> <span class="o">||=</span> <span class="n">string</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;^//(.)&#39;</span><span class="p">)</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+</span><span class='line'>        <span class="n">string</span><span class="o">.</span><span class="n">sub!</span><span class="p">(</span><span class="sr">/^\/\/(.)/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">string</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+</span><span class='line'>      <span class="n">string</span><span class="o">.</span><span class="n">gsub!</span><span class="p">(</span><span class="sr">/\n/</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="vi">@delimiter</span> <span class="o">&amp;&amp;</span>
+</span><span class='line'>      <span class="p">(</span><span class="k">return</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="vi">@delimiter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:to_i</span><span class="p">)</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:+</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sr">/[,\s]/</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:to_i</span><span class="p">)</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:+</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="no">StringCalculator</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:calc</span><span class="p">)</span> <span class="p">{</span> <span class="no">StringCalculator</span><span class="o">.</span><span class="n">new</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">it</span> <span class="s2">&quot;returns 0 for empty string&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">calc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">it</span> <span class="s2">&quot;returns 1 for &#39;1&#39;&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">calc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">it</span> <span class="s2">&quot;returns 3 for &#39;1,2&#39;&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">calc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;1,2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="mi">3</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">it</span> <span class="s2">&quot;returns 55 for &#39;1,2,3,4,5,6,7,8,9,10&#39;&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">calc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;1,2,3,4,5,6,7,8,9,10&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="mi">55</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">it</span> <span class="s2">&quot;returns 6 for &#39;1</span><span class="se">\\</span><span class="s2">n2,3&#39;&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">calc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;1</span><span class="se">\n</span><span class="s2">2,3&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="mi">6</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">it</span> <span class="s2">&quot;returns nil for &#39;1,</span><span class="se">\\</span><span class="s2">n&#39;&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">calc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;1,</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="n">be_nil</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">context</span> <span class="s2">&quot;when changing the delimiter to &#39;;&#39;&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">it</span> <span class="s2">&quot;returns 3 for &#39;//;</span><span class="se">\\</span><span class="s2">n1;2&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">calc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;//;</span><span class="se">\n</span><span class="s2">1;2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="mi">3</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">context</span> <span class="s2">&quot;when changing the delimiter to &#39;: and terminating the string with &#39;</span><span class="se">\\</span><span class="s2">n&#39;&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">it</span> <span class="s2">&quot;returns nil for &#39;//:</span><span class="se">\\</span><span class="s2">n1:</span><span class="se">\\</span><span class="s2">n&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">calc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;//:</span><span class="se">\n</span><span class="s2">1:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="n">be_nil</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Lispifying The Solution</h3>
+
+<p>Since I wasn&#8217;t able to use the <code>if</code>, <code>else</code>, <code>switch</code>, and <code>case</code> keywords, I had to think of a new way of having my program make decisions. I observed that I was using methods that returned booleans such as <code>empty?</code>, <code>start_with?</code>, <code>end_with?</code>, and <code>include?</code>. My mind was screaming at me: &#8220;USE AN IF STATEMENT HERE!&#8221; I refrained. All I knew was that I wanted my program to make decisions based on whether or not the results of those method calls were true. Then I had my &#8216;Ah ha!&#8217; moment. Part of what led me to use the <code>&amp;&amp;</code> operator in my code came about because I am learning Common Lisp. Here is a snippet of Lisp code that checks to see if an atom belongs to a list:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="p">(</span><span class="n">defun</span> <span class="n">member?</span> <span class="p">(</span><span class="n">a</span> <span class="n">lst</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="n">cond</span>
+</span><span class='line'>    <span class="p">((</span><span class="n">null</span> <span class="n">lst</span><span class="p">)</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="n">T</span> <span class="p">(</span><span class="ow">or</span>
+</span><span class='line'>         <span class="p">(</span><span class="n">eq</span> <span class="n">a</span> <span class="p">(</span><span class="n">car</span> <span class="n">lst</span><span class="p">))</span>
+</span><span class='line'>         <span class="p">(</span><span class="n">member?</span> <span class="n">a</span> <span class="p">(</span><span class="n">cdr</span> <span class="n">lst</span><span class="p">))))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Take a look at the OR statement. If the atom <code>a</code> is equal to the first item of the list in <code>lst</code>, then <code>member?</code> returns true and it exits the function; otherwise it will evaluate the statement <code>member?</code> and pass the atom <code>a</code> and the remaining items in the <code>lst</code> not including the first item. Did you see how you can use an a function call as a statement to be used with an <code>or</code> operator? In my solution, I went ahead and using this logic except I used the <code>&amp;&amp;</code> operator to accomplish this. Let&#8217;s walk through some of the code in the solution.</p>
+
+<h3>A Walkthrough</h3>
+
+<p>We begin by recalling the requirements of the string calculator. The first requirement is to return 0 for an empty string. To meet that requirement, I write code to query the string and ask if it is <code>empty?</code>. When I pass an empty string, the response will be <code>true</code>. Since the statement to the left of the <code>&amp;&amp;</code> operator is true, the <code>&amp;&amp;</code> must take the next step of evaluating the statement to the right.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">string</span><span class="o">.</span><span class="n">empty?</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="k">return</span> <span class="mi">0</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The statement on the right is a <code>return</code> statement, so we leave the <code>add</code> function with the result of <code>0</code> for an empty string. The same logic applies to the next call <code>end_with?</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">string</span><span class="o">.</span><span class="n">end_with?</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="k">return</span> <span class="kp">nil</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If the string ends with a newline character <code>"\n"</code>, the <code>&amp;&amp;</code> operator is forced to execute the statement to the right.</p>
+
+<p>In the next few lines, I took the <code>&amp;&amp;</code> operator further. I know that all Ruby objects return <code>true</code>. With that understanding, I went ahead and chained three statements with the <code>&amp;&amp;</code> operator:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">string</span><span class="o">.</span><span class="n">start_with?</span><span class="p">(</span><span class="s2">&quot;//&quot;</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+</span><span class='line'>  <span class="p">(</span><span class="vi">@delimiter</span> <span class="o">||=</span> <span class="n">string</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;^//(.)&#39;</span><span class="p">)</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+</span><span class='line'>    <span class="n">string</span><span class="o">.</span><span class="n">sub!</span><span class="p">(</span><span class="sr">/^\/\/(.)/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Doesn&#8217;t that cascading style remind you of Lisp? I think this is really cool! This code covers the case when the user wants to change the delimiter in the string. Instead of using commas and passing a string such as <code>"1,2"</code>, the user can now pass a string like this: <code>"//;\n1;2"</code>. Passing this kind of string to the <code>add</code> method should change the delimiter from a comma to a semicolon. Let&#8217;s suppose we receive the string <code>"//;\n1;2"</code>. We see it starts with <code>"//"</code> so the method <code>start_with?</code> returns <code>true</code>. Since we are <code>&amp;&amp;</code>ing our statements together, all of them must return true in order for all three to be executed, otherwise, we will skip to the next portion of the program. The next step involves capturing the new delimiter and caching the results to the <code>@delimiter</code> instance variable. That entire statement returns true because at the end <code>@delimiter</code> has a non-nil value. We move on to the next statement, which removes the delimiter information from the original string so that we can parse the number information.</p>
+
+<p>This next line is my favorite one.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="vi">@delimiter</span> <span class="o">&amp;&amp;</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">return</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="vi">@delimiter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:to_i</span><span class="p">)</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:+</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Since we received a cached result from the previous chain of statements for <code>@delimiter</code>, <code>@delimiter</code> is a non-nil object which evaluates to <code>true</code>. Since <code>@delimiter</code> evaluates to <code>true</code>, we move to the next statement and evaluate it. I especially like how I passed the methods <code>to_i</code> and <code>+</code> as symbols to the <code>map</code> and <code>inject</code> methods. It saved me space and communicates its intent! We split on the new delimiter, convert each string represented as a number to an integer, and then collect a running sum and return the result.</p>
+
+<h2>Take Aways</h2>
+
+<p>The most valuable thing I got from having done this kata were the constraints I placed on myself. They pushed me outside of the comfort of the familiar techniques I used and demanded more from me. I did notice the repetition toward the bottom of the <code>add</code> method. I had some difficulty refactoring the code in time. Perhaps next time I perform this kata, I&#8217;ll have a DRYer version.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -781,6 +1060,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2011/11/23/string-calculator-kata-without-if/">String Calculator Kata Without If, Else, Switch, or Case</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2011/11/15/ruby-monk-problem-capitalizing-an-array-with-names-revisited/">Ruby Monk Problem - Capitalizing an Array With Names (Revisited)</a>
       </li>
     
@@ -794,10 +1077,6 @@
     
       <li class="post">
         <a href="/blog/2011/11/07/karate-chop-code-kata-first-run/">Karate Chop Code Kata - First Run</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2011/10/16/using-bundle-install-in-a-rails-3-generator/">Using &#8216;Bundle Install&#8217; in a Rails 3 Generator</a>
       </li>
     
   </ul>
