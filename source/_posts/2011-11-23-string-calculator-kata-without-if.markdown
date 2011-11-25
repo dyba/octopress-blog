@@ -3,7 +3,7 @@ layout: post
 title: "String Calculator Kata Without If, Else, Switch, or Case"
 date: 2011-11-23 14:06
 comments: true
-categories: [Ruby, Kata]
+categories: [Ruby, Code Kata]
 ---
 The goal of this kata is to create a calculator that can add the numbers found in a string. I found this kata on [Roy Osherove's website](http://osherove.com/tdd-kata-1/). Here are the instructions for doing this kata:
 
