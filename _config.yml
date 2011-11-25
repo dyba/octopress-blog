@@ -4,7 +4,7 @@
 
 url: http://danieldyba.com
 title: Daniel Dyba
-subtitle: Rails Developer, Programming Linguaphile
+subtitle: Rails Developer, Passionate Independent Learner
 author: Daniel Dyba
 simple_search: http://google.com/search
 
@@ -56,10 +56,10 @@ github_skip_forks: true
 
 # Twitter
 twitter_user: dyba
-twitter_tweet_count: 4
-twitter_show_replies: false
+twitter_tweet_count: 5
+twitter_show_replies: true
 twitter_follow_button: true
-twitter_show_follower_count: false
+twitter_show_follower_count: true
 twitter_tweet_button: true
 
 # Google Plus
