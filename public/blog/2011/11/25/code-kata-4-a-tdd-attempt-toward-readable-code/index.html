@@ -1,0 +1,741 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Code Kata 4: A TDD Attempt Toward Readable Code - Daniel Dyba</title>
+  <meta name="author" content="Daniel Dyba">
+
+  
+  <meta name="description" content="Code Kata #4 - Data Munging Part OneOverviewThe fourth Code Kata in Dave Thomas&#8217; Code Kata blog asks you to do the following:write a program ...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://danieldyba.com/blog/2011/11/25/code-kata-4-a-tdd-attempt-toward-readable-code/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Daniel Dyba" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Daniel Dyba</a></h1>
+  
+    <h2>Rails Developer, Passionate Independent Learner</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:danieldyba.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about/">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Code Kata 4: A TDD Attempt Toward Readable Code</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-11-25T13:02:00-08:00" pubdate  data-updated="true" >Nov 25<span>th</span>, 2011</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>Code Kata #4 - Data Munging Part One</h2>
+
+<h3>Overview</h3>
+
+<p>The fourth Code Kata in Dave Thomas&#8217; Code Kata blog asks you to do the following:</p>
+
+<blockquote><p>write a program to output the day number (column one) with the smallest temperature spread (the maximum temperature is the second column, the minimum the third column).</p></blockquote>
+
+
+<p>He provides a weather.dat file for you to download and which you will parse through in order to obtain the solution. In this post, I will only cover the first part of the code kata. I completed the first part of the kata over the course of 3 days working up to 4 hours on one day and thinking about the problem when not in front of the computer screen. Let&#8217;s take a look at a solution I developed.</p>
+
+<h3>The Completed Code</h3>
+
+<figure class='code'><figcaption><span>WeatherReader program at /lib/weather_reader.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">WeatherReader</span>
+</span><span class='line'>  <span class="kp">attr_reader</span> <span class="ss">:data</span><span class="p">,</span> <span class="ss">:spread</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@data</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">readlines</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">reject</span><span class="p">(</span><span class="o">&amp;</span><span class="n">no_data</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">date_of_smallest_spread</span>
+</span><span class='line'>    <span class="vi">@data</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="n">spread</span><span class="p">)</span><span class="o">.</span><span class="n">find_index</span><span class="p">(</span><span class="n">smallest_spread</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">smallest_spread</span>
+</span><span class='line'>    <span class="vi">@data</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="n">spread</span><span class="p">)</span><span class="o">.</span><span class="n">min</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">spread</span>
+</span><span class='line'>    <span class="vi">@spread</span> <span class="o">||=</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">temperature</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="ss">:max</span><span class="p">)</span> <span class="o">-</span> <span class="n">temperature</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="ss">:min</span><span class="p">))</span><span class="o">.</span><span class="n">abs</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">private</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">temperature</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">line</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span><span class="o">[</span><span class="n">kind</span><span class="o">].</span><span class="n">to_i</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">no_data</span>
+</span><span class='line'>      <span class="o">-&gt;</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="p">{</span> <span class="n">line</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span><span class="o">.</span><span class="n">nil?</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">regex</span>
+</span><span class='line'>      <span class="sr">%r{</span>
+</span><span class='line'><span class="sr">        (?&lt;day&gt; \d+){0}</span>
+</span><span class='line'><span class="sr">        (?&lt;max&gt; \d+){0}</span>
+</span><span class='line'><span class="sr">        (?&lt;min&gt; \d+){0}</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">        \g&lt;day&gt;\s+\g&lt;max&gt;\s+\g&lt;min&gt;</span>
+</span><span class='line'><span class="sr">      }x</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>RSpec Examples /spec/weather_reader_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rspec&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="no">WeatherReader</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">describe</span> <span class="s2">&quot;Utility methods&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">let</span><span class="p">(</span><span class="ss">:weather_reader</span><span class="p">)</span> <span class="p">{</span> <span class="no">WeatherReader</span><span class="o">.</span><span class="n">new</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">before</span><span class="p">(</span><span class="ss">:each</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>      <span class="vi">@data</span> <span class="o">=</span> <span class="n">weather_reader</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;weather.dat&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">it</span> <span class="s2">&quot;filters lines that don&#39;t contain weather data&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="vi">@data</span><span class="o">.</span><span class="n">should_not</span> <span class="kp">include</span><span class="p">(</span><span class="s2">&quot; MMU June 2002</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">context</span> <span class="s2">&quot;given a line containing weather data for a day&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">let</span><span class="p">(</span><span class="ss">:line</span><span class="p">)</span> <span class="p">{</span> <span class="s2">&quot;   1  88    59    74          53.8       0.00 F       280  9.6 270  17  1.6  93 23 1004.5&quot;</span> <span class="p">}</span>
+</span><span class='line'>      <span class="n">it</span> <span class="s2">&quot;returns the difference between the maximum temperature and minimum temperature&quot;</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">weather_reader</span><span class="o">.</span><span class="n">spread</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="mi">29</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">context</span> <span class="s2">&quot;given lines containing weather data for several days&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">it</span> <span class="s2">&quot;returns the smallest temperature spread&quot;</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">weather_reader</span><span class="o">.</span><span class="n">smallest_spread</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="mi">2</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">it</span> <span class="s2">&quot;returns the date that had the smallest temperature spread&quot;</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">weather_reader</span><span class="o">.</span><span class="n">date_of_smallest_spread</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="mi">14</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>Contents of the weather.dat file</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">(</span>Unofficial, Preliminary Data<span class="o">)</span>. Source: &lt;a
+</span><span class='line'><span class="nv">href</span><span class="o">=</span><span class="s2">&quot;http://www.erh.noaa.gov/er/box/dailystns.html&quot;</span>&gt;www.erh.noaa.gov/er/box/dailystns.html&lt;/a&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;
+</span><span class='line'> MMU June 2002
+</span><span class='line'>
+</span><span class='line'>  Dy MxT   MnT   AvT   HDDay  AvDP 1HrP TPcpn WxType PDir AvSp Dir MxS SkyC MxR MnR AvSLP
+</span><span class='line'>
+</span><span class='line'>   1  88    59    74          53.8       0.00 F       280  9.6 270  17  1.6  93 23 1004.5
+</span><span class='line'>   2  79    63    71          46.5       0.00         330  8.7 340  23  3.3  70 28 1004.5
+</span><span class='line'>   3  77    55    66          39.6       0.00         350  5.0 350   9  2.8  59 24 1016.8
+</span><span class='line'>   4  77    59    68          51.1       0.00         110  9.1 130  12  8.6  62 40 1021.1
+</span><span class='line'>   5  90    66    78          68.3       0.00 TFH     220  8.3 260  12  6.9  84 55 1014.4
+</span><span class='line'>   6  81    61    71          63.7       0.00 RFH     030  6.2 030  13  9.7  93 60 1012.7
+</span><span class='line'>   7  73    57    65          53.0       0.00 RF      050  9.5 050  17  5.3  90 48 1021.8
+</span><span class='line'>   8  75    54    65          50.0       0.00 FH      160  4.2 150  10  2.6  93 41 1026.3
+</span><span class='line'>   9  86    32*   59       6  61.5       0.00         240  7.6 220  12  6.0  78 46 1018.6
+</span><span class='line'>  10  84    64    74          57.5       0.00 F       210  6.6 050   9  3.4  84 40 1019.0
+</span><span class='line'>  11  91    59    75          66.3       0.00 H       250  7.1 230  12  2.5  93 45 1012.6
+</span><span class='line'>  12  88    73    81          68.7       0.00 RTH     250  8.1 270  21  7.9  94 51 1007.0
+</span><span class='line'>  13  70    59    65          55.0       0.00 H       150  3.0 150   8 10.0  83 59 1012.6
+</span><span class='line'>  14  61    59    60       5  55.9       0.00 RF      060  6.7 080   9 10.0  93 87 1008.6
+</span><span class='line'>  15  64    55    60       5  54.9       0.00 F       040  4.3 200   7  9.6  96 70 1006.1
+</span><span class='line'>  16  79    59    69          56.7       0.00 F       250  7.6 240  21  7.8  87 44 1007.0
+</span><span class='line'>  17  81    57    69          51.7       0.00 T       260  9.1 270  29* 5.2  90 34 1012.5
+</span><span class='line'>  18  82    52    67          52.6       0.00         230  4.0 190  12  5.0  93 34 1021.3
+</span><span class='line'>  19  81    61    71          58.9       0.00 H       250  5.2 230  12  5.3  87 44 1028.5
+</span><span class='line'>  20  84    57    71          58.9       0.00 FH      150  6.3 160  13  3.6  90 43 1032.5
+</span><span class='line'>  21  86    59    73          57.7       0.00 F       240  6.1 250  12  1.0  87 35 1030.7
+</span><span class='line'>  22  90    64    77          61.1       0.00 H       250  6.4 230   9  0.2  78 38 1026.4
+</span><span class='line'>  23  90    68    79          63.1       0.00 H       240  8.3 230  12  0.2  68 42 1021.3
+</span><span class='line'>  24  90    77    84          67.5       0.00 H       350  8.5 010  14  6.9  74 48 1018.2
+</span><span class='line'>  25  90    72    81          61.3       0.00         190  4.9 230   9  5.6  81 29 1019.6
+</span><span class='line'>  26  97*   64    81          70.4       0.00 H       050  5.1 200  12  4.0 107 45 1014.9
+</span><span class='line'>  27  91    72    82          69.7       0.00 RTH     250 12.1 230  17  7.1  90 47 1009.0
+</span><span class='line'>  28  84    68    76          65.6       0.00 RTFH    280  7.6 340  16  7.0 100 51 1011.0
+</span><span class='line'>  29  88    66    77          59.7       0.00         040  5.4 020   9  5.3  84 33 1020.6
+</span><span class='line'>  30  90    45    68          63.6       0.00 H       240  6.0 220  17  4.8 200 41 1022.7
+</span><span class='line'>  mo  82.9  60.5  71.7    16  58.8       0.00              6.9          5.3
+</span><span class='line'>&lt;/pre&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>TDD is Software Improv</h2>
+
+<p>It is unfortunate that I didn&#8217;t capture the dynamic interplay between writing/rewriting the tests and writing/rewriting the code in this example. I think I originally heard it from David Chelimsky at SCNA 2011 who said that Test Driven Development is Software Improv. TDD is a sweeping movement involving writing your tests, writing code to pass your tests, refactoring your code, refactoring your tests, critiquing your code to determine how you should write your next test, and critiquing your tests to inform the design of your code. TDD truly is an art form.</p>
+
+<p>Even as I write this post, I understand how difficult it is to capture the TDD process in writing. Have you ever seen Live Improv as a series of photos? For one thing, you won&#8217;t catch the humor in the dialogue. You might laugh at the pictures, but you won&#8217;t get the jokes unless you had understood the context in which they were delivered; that&#8217;s where the dialogue is important. But listening to the dialogue alone isn&#8217;t enough. You wouldn&#8217;t be able to capture the subtle nuances in the gestures of the performers. The photos wouldn&#8217;t capture that because they are minutes, even seconds apart. Now what happens if you see Live Improv as an audience member? You finally get it. In the same way, TDD cannot be expressed as a static blog post. I do not do it justice by simply talking about it; however, I will do my best to inform you what happens in the process of doing TDD.</p>
+
+<h2>Debrief</h2>
+
+<h3>How&#8217;d you get there?</h3>
+
+<p>At the beginning, I started writing very trivial test cases that would check for the return type of the <code>read</code> method. It would check to make sure that the return values were not nil. Of course, you don&#8217;t see these test cases in the final product. That&#8217;s because those tests acted like scaffolding that I temporarily used to get me started. After I build the right structure in my program, I wrote other tests that rendered that scaffolding test code obsolete.</p>
+
+<p>TDD is an incremental process. You should only be writing the minimal amount of code to make your tests pass. I think this is where I didn&#8217;t do as great a job executing TDD. Once I understood the pattern of the code I needed to write, I went ahead and wrote that as production code. In the real world, the patterns won&#8217;t be as obvious and it will take having to write code for every case until you see an overarching picture of the kind of code that would cover the general case.</p>
+
+<p>The example I will cite here is when I test a single line of data to determine if I get the right value for the spread of the maximum and minimum temperature. The next thing I do is write the code that does that for every line of code. Probably the way I should have gone about that was to write a regular expression that was hardcoded to that particular string. Then I should have thrown in another case where there is an asterisk next to the maximum or minimum temperature as is true for day 9 or day 26 in the weather.dat file. When you work on a larger project, it may not be obvious how you can generalize the production code you need to write. Thus, it is a good habit to build your program incrementally when you do TDD.</p>
+
+<h3>Programming With Lambdas</h3>
+
+<p>Recently, I have been making more of an effort to introduce lambdas in my code. Lambdas and Procs were one of the most nebulous ideas for me when I first started programming in Ruby. Only recently did I start playing with passing lambdas as arguments to methods. Originally, the <code>no_data</code> method wasn&#8217;t in my code. It came about during the refactoring phase when I wanted to make the read method more concise (and curiously also wanted to see if I could extract the code block into something more meaningful). The code had read like so:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span><span class='line'>  <span class="no">File</span><span class="o">.</span><span class="n">readlines</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">line</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">line</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span><span class="o">.</span><span class="n">nil?</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, there&#8217;s nothing wrong with that. However, if I were another programmer trying to read this code, I would be asking myself, &#8220;What are you matching against?&#8221; So I decided to write this instead:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span><span class='line'>  <span class="no">File</span><span class="o">.</span><span class="n">readlines</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">reject</span><span class="p">(</span><span class="o">&amp;</span><span class="n">no_data</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To me that reads more clearly than the first example. It may be a little difficult for newer programmers to understand what the syntax is doing. But it is clear that I am rejecting data from the lines of the file I read. Here is the code for the <code>no_data</code> method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">no_data</span>
+</span><span class='line'>  <span class="o">-&gt;</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="p">{</span> <span class="n">line</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span><span class="o">.</span><span class="n">nil?</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The name of the method communicates its function. It defines what data is not; however, I probably could have written a different name for <code>regex</code>. Looking at it right now it doesn&#8217;t communicate its intent. Perhaps, I should have written something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">no_data</span>
+</span><span class='line'>  <span class="o">-&gt;</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="p">{</span> <span class="n">line</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">weather_data</span><span class="p">)</span><span class="o">.</span><span class="n">nil?</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That would have been more helpful to someone who is trying to find out how the <code>no_data</code> method works.</p>
+
+<h3>Being Expressive with Regular Expressions</h3>
+
+<p>If that same programmer wanted to see what <code>regex</code> would look like, they would see this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">regex</span>
+</span><span class='line'>  <span class="sr">%r{</span>
+</span><span class='line'><span class="sr">    (?&lt;day&gt; \d+){0}</span>
+</span><span class='line'><span class="sr">    (?&lt;max&gt; \d+){0}</span>
+</span><span class='line'><span class="sr">    (?&lt;min&gt; \d+){0}</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">    \g&lt;day&gt;\s+\g&lt;max&gt;\s+\g&lt;min&gt;</span>
+</span><span class='line'><span class="sr">  }x</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Originally, I had written down this expression:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">regex</span><span class="sr"></span>
+</span><span class='line'><span class="sr">  /(\d+)\s+(\d+)\s+(\d+)/</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What is that expression supposed to be doing? It is capturing three groups of numbers that are separated by spaces. But those numbers don&#8217;t have any meaning at all! That&#8217;s when I decided to use the &#8216;x&#8217; option to allow spaces in my regular expression. I went ahead and added named subroutines in order to layer the regular expression with meaning. Notice that I named the groups as <code>&lt;day&gt;</code>,<code>&lt;max&gt;</code>,<code>&lt;min&gt;</code>&#8212;all names that are relevant to the problem at hand. Unfortunately, those names alone don&#8217;t provide much meaning to the problem, I probably should have been a bit more descriptive with the names: &#8220;Maximum of what?&#8221;, &#8220;Minimum of what?&#8221; &#8220;Are we talking about heights? weights? distances?&#8221; A better implementation would have been:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">weather_data</span>
+</span><span class='line'>  <span class="sr">%r{</span>
+</span><span class='line'><span class="sr">    (?&lt;day&gt;             \d+){0}</span>
+</span><span class='line'><span class="sr">    (?&lt;max_temperature&gt; \d+){0}</span>
+</span><span class='line'><span class="sr">    (?&lt;min_temperature&gt; \d+){0}</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">    \g&lt;day&gt;\s+\g&lt;max_temperature&gt;\s+\g&lt;min_temperature&gt;</span>
+</span><span class='line'><span class="sr">  }x</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The reason why I didn&#8217;t add the names <code>max_temperature</code>, and <code>min_temperature</code>, was because of the way I implemented the <code>temperature</code> method in my program.</p>
+
+<h3>Something Smells</h3>
+
+<p>Take a look at the following code:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">def</span> <span class="nf">spread</span>
+</span><span class='line'>    <span class="vi">@spread</span> <span class="o">||=</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">temperature</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="ss">:max</span><span class="p">)</span> <span class="o">-</span> <span class="n">temperature</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="ss">:min</span><span class="p">))</span><span class="o">.</span><span class="n">abs</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">private</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">temperature</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">line</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span><span class="o">[</span><span class="n">kind</span><span class="o">].</span><span class="n">to_i</span>
+</span><span class='line'>    <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Had I changed the names in my regular expressions, I would have had to change the above code to this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">def</span> <span class="nf">spread</span>
+</span><span class='line'>    <span class="vi">@spread</span> <span class="o">||=</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">temperature</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="ss">:max_temperature</span><span class="p">)</span> <span class="o">-</span> <span class="n">temperature</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="ss">:min_temperature</span><span class="p">))</span><span class="o">.</span><span class="n">abs</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">private</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">temperature</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">line</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span><span class="o">[</span><span class="n">kind</span><span class="o">].</span><span class="n">to_i</span>
+</span><span class='line'>    <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Why is temperature mentioned twice in a method call? It is adding too much noise. I should have just gotten rid of the <code>temperature</code> method and attempted a better implementation like so:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">def</span> <span class="nf">spread</span>
+</span><span class='line'>    <span class="vi">@spread</span> <span class="o">||=</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">weather_data</span><span class="p">)</span><span class="o">[</span><span class="ss">:max_temperature</span><span class="o">].</span><span class="n">to_i</span> <span class="o">-</span> <span class="n">line</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">weather_data</span><span class="p">)</span><span class="o">[</span><span class="ss">:min_temperature</span><span class="o">].</span><span class="n">to_i</span><span class="p">)</span><span class="o">.</span><span class="n">abs</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">private</span>
+</span><span class='line'><span class="cm">=begin </span>
+</span><span class='line'><span class="cm">Smells bad</span>
+</span><span class='line'><span class="cm">    def temperature(line, kind)</span>
+</span><span class='line'><span class="cm">      line.match(regex)[kind].to_i</span>
+</span><span class='line'><span class="cm">    end</span>
+</span><span class='line'><span class="cm">=end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Even the above implementation is too long to read, but it communicates its intent better than the method I had written.</p>
+
+<h2>Take Aways</h2>
+
+<p>When doing TDD, you always need to keep in mind the other programmer who will be reading your code. It is not enough to make the program work; it needs to be readable and easy to understand for the rest of your team.</p>
+
+<p>There are other things I didn&#8217;t get a chance to cover in this post that would have made it too long: one of those things included the implementation of finding the smallest spread and the date for that spread. I&#8217;d like to see your implementation of this code kata. Perhaps there is some other way of implementing this that had not occurred to me. I welcome your insight. I invite you to provide any feedback in the comments below.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Daniel Dyba</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-11-25T13:02:00-08:00" pubdate  data-updated="true" >Nov 25<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/code-kata/'>Code Kata</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://danieldyba.com/blog/2011/11/25/code-kata-4-a-tdd-attempt-toward-readable-code/" data-via="dyba" data-counturl="http://danieldyba.com/blog/2011/11/25/code-kata-4-a-tdd-attempt-toward-readable-code/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+</div>
+
+    
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/11/25/code-kata-4-a-tdd-attempt-toward-readable-code/">Code Kata 4: A TDD Attempt Toward Readable Code</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/23/string-calculator-kata-without-if/">String Calculator Kata Without If, Else, Switch, or Case</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/15/ruby-monk-problem-capitalizing-an-array-with-names-revisited/">Ruby Monk Problem - Capitalizing an Array With Names (Revisited)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/13/ruby-monk-problem-capitalizing-an-array-of-names/">Ruby Monk Problem - Capitalizing an Array of Names</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/11/karate-chop-code-kata-second-run/">Karate Chop Code Kata - Second Run</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/dyba">@dyba</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'dyba',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("dyba", 5, true);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/dyba" class="twitter-follow-button" data-width="208px" data-show-count="true">Follow @dyba</a>
+  
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Daniel Dyba -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    (function () {
+      var disqus_shortname = 'danieldyba';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://danieldyba.com/blog/2011/11/25/code-kata-4-a-tdd-attempt-toward-readable-code/';
+        var disqus_url = 'http://danieldyba.com/blog/2011/11/25/code-kata-4-a-tdd-attempt-toward-readable-code/';
+        var disqus_script = 'embed.js'
+      
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+
+
+</body>
+</html>
