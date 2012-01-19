@@ -1,0 +1,345 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Writing My First Usage Narrative - Daniel Dyba</title>
+  <meta name="author" content="Daniel Dyba">
+
+  
+  <meta name="description" content="In an effort to understand the analysis and design of object-oriented systems, I picked up a book by Alistair Cockburn (pronounced COH-burn) called...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://danieldyba.com/blog/2012/01/19/writing-my-first-usage-narrative/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Daniel Dyba" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Daniel Dyba</a></h1>
+  
+    <h2>Rails Developer, Passionate Independent Learner</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:danieldyba.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about/">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Writing My First Usage Narrative</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-01-19T12:19:00-08:00" pubdate  data-updated="true" >Jan 19<span>th</span>, 2012</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>In an effort to understand the analysis and design of object-oriented systems, I picked up a book by Alistair Cockburn (pronounced COH-burn) called <em>Writing Effective Use Cases</em>. Building object-oriented systems can become quite complex. If you haven&#8217;t thoroughly analyzed how your system is supposed to work, you may come to wonder whether or not you are meeting the needs of the stakeholders. This is where use cases come in to play. According to Cockburn, a use case &#8220;captures a contract between the stakeholders of a system about its behavior&#8221; (Cockburn 1).  But if you&#8217;ve never written a use case before, you might wonder how you would begin. This is where usage narratives come in to play.</p>
+
+<h2>Usage Narratives: Catalysts for Writing Use Cases</h2>
+
+<p>Toward the end of the first chapter, Cockburn talks about writing usage narratives as a way to warm up prior to writing use cases. Usage narratives are stories. It is a story with a specific actor/actress in mind. When I say actor/actress (for simplicity, &#8216;actor&#8217;), I mean the main character of the story who will use the system you are designing. To keep the reader engaged in the usage narrative, it helps to be very specific with your actor and to add just enough details to paint a picture of who the actor is. A usage narrative will help you see how your system will be used. It will put you in the right mode of thinking to delve deeper if needed when you write your use cases.</p>
+
+<p>One of the exercises in the chapter asks you to write a usage narrative for the ATM you use. Here is my first run at it:</p>
+
+<hr />
+
+<p><strong>Usage Narrative: Withdraw Cash</strong></p>
+
+<p>Daniel, a 27-year-old absent-minded engineer who keeps track of his expenditures by saving every receipt, walks up to the ATM. He slides his card in the ATM. He selects &#8220;Withdraw Cash&#8221;. He selects the amount $100. When prompted by the system to finish his transaction, he selects &#8220;Yes&#8221;. The system asks if he would like a receipt. He selects &#8220;Yes&#8221;. The ATM prints out a receipt. Next, the ATM alerts Daniel that it has ejected his card to avoid having him forget to retrieve it. Daniel takes his card and heads home.</p>
+
+<hr />
+
+<p>Then, I read Cockburn&#8217;s example:</p>
+
+<hr />
+
+<p><strong>Usage Narrative: Getting &#8220;Fash Cash&#8221;</strong></p>
+
+<p>Mary, taking her two daughters to the day care center on the way to work, drives up to the ATM, runs her card across the card reader, enters her PIN code, selects FAST CASH, and enters $35 as the amount. The ATM issues a $20 and three $5 bills, plus a receipt showing her account balance after the $35 is debited. The ATM resets its screens after each transaction with FAST CASH, so Mary can drive away and not worry that the next driver will have access to her account. Mary likes FAST CASH because it avoid the many questions that slow down the interaction. She comes to this particular ATM because it issues $5 bills, which she uses to pay the day care provider, and she doesn&#8217;t have to get out of her car to use it. (Cockburn 18)</p>
+
+<hr />
+
+<p>After reading his example, I thought: I never got my money! Only after having read his example and then read mine did I notice that my ATM machine never dispensed the $100 I requested! I thought it funny that I described myself as absent-minded before noticing I had forgot to pick up my money from the ATM. I probably revealed more than I had wanted in this example. There&#8217;s nothing wrong about the way I wrote my usage narrative; however, I missed some important details. This isn&#8217;t a bad thing especially since I realized this quickly enough. The key is that I recognized what was missing upon reading it.</p>
+
+<h2>Comparing and Contrasting</h2>
+
+<p>Let&#8217;s take a closer look at how I could have improved my usage narrative.</p>
+
+<p>To start off, I could have been more specific with the amount of money I received from the ATM. I probably don&#8217;t want to get back a $100 bill. I would rather get $20 bills because it is more likely I will get change easily. Another thing I could have done is elaborate on how this ATM provides <em>value</em> to me. I noticed that Cockburn&#8217;s example mentions three key reasons why this ATM has value to Mary:</p>
+
+<ol>
+<li>It issues $5 bills. Mary can use the $5 bills to pay the day care provider.</li>
+<li>It is accessible. She doesn&#8217;t have to get out of her car and walk up to it. She can use it from the driver&#8217;s seat of a vehicle.</li>
+<li>It dispenses cash quickly. The ATM has a FAST CASH feature that make withdrawals a snap.</li>
+</ol>
+
+
+<p>My usage narrative did include one reason how this ATM provides value to me although it wasn&#8217;t made as clear as Cockburn&#8217;s example. I described myself as being absent-minded and one who collects every receipt in order to track my expenditures. This particular ATM does provide a receipt printout which is exactly the feature that meets my needs.</p>
+
+<p>I tried to be specific with the character I used in my example. In particular, because I noted my actor as being absent-minded, it became clear that the ATM needed to have a feature that reminded the actor to retrieve their card after dispensing cash. In that respect, my example is comparable in quality to the detailed description of the actor in Cockburn&#8217;s example. Since I noted this ATM reminds its users to retrieve their card, one can argue that I implicitly demonstrated the value of the ATM in my example: by alerting the user when the transaction is complete, the ATM reminds the user to not forget their card at the ATM.</p>
+
+<h2>Essential Elements of a Usage Narrative</h2>
+
+<p>Now that you&#8217;ve had a chance to look at what a usage narrative looks like, I will wrap up with the elements that are essential to writing a usage narrative according to Cockburn. A usage narrative must be brief in order for the reader to comprehend it easily. It must capture the mental state of the actor who will be using the system, that is, &#8220;why he wants what he wants or what conditions drive him to act as he does&#8221; (Cockburn 18). He goes on to say that &#8220;details and motives, or emotional content, are important so that every reader… can see how the system should be optimized to add value to the user&#8221; (Cockburn 18). Thus, a usage narrative must:</p>
+
+<ul>
+<li>Be brief</li>
+<li>Capture the mental state of the actor using the system</li>
+<li>Demonstrate value to the actor</li>
+</ul>
+
+
+<p>Combining the above elements in a usage narrative will help you see the system in use. Cockburn also reminds us that &#8220;the narrative is not the requirements; rather, it sets the stage for more detailed and generalized descriptions of the requirements&#8221; (Cockburn 18).</p>
+
+<h2>Your Turn</h2>
+
+<p>The next time you try writing use cases, consider writing a usage narrative instead to warm you up for the real thing. You could even try writing a usage narrative for the ATM you go to and add it in the comments below.</p>
+
+<h3>Bibliography</h3>
+
+<p>Cockburn, Alistair. <em>Writing Effective Use Cases</em>. Boston: Addison-Wesley, 2001. Print</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Daniel Dyba</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-01-19T12:19:00-08:00" pubdate  data-updated="true" >Jan 19<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/usage-narratives/'>Usage Narratives</a>, <a class='category' href='/blog/categories/use-cases/'>Use Cases</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://danieldyba.com/blog/2012/01/19/writing-my-first-usage-narrative/" data-via="dyba" data-counturl="http://danieldyba.com/blog/2012/01/19/writing-my-first-usage-narrative/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+</div>
+
+    
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/01/19/writing-my-first-usage-narrative/">Writing My First Usage Narrative</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/25/code-kata-4-a-tdd-attempt-toward-readable-code/">Code Kata 4: A TDD Attempt Toward Readable Code</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/23/string-calculator-kata-without-if/">String Calculator Kata Without If, Else, Switch, or Case</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/15/ruby-monk-problem-capitalizing-an-array-with-names-revisited/">Ruby Monk Problem - Capitalizing an Array With Names (Revisited)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/13/ruby-monk-problem-capitalizing-an-array-of-names/">Ruby Monk Problem - Capitalizing an Array of Names</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/dyba">@dyba</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'dyba',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("dyba", 5, true);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/dyba" class="twitter-follow-button" data-width="208px" data-show-count="true">Follow @dyba</a>
+  
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Daniel Dyba -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    (function () {
+      var disqus_shortname = 'danieldyba';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://danieldyba.com/blog/2012/01/19/writing-my-first-usage-narrative/';
+        var disqus_url = 'http://danieldyba.com/blog/2012/01/19/writing-my-first-usage-narrative/';
+        var disqus_script = 'embed.js'
+      
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+
+
+</body>
+</html>
