@@ -196,8 +196,7 @@
 
 <p>The fourth Code Kata in Dave Thomas&#8217; Code Kata blog asks you to do the following:</p>
 
-<blockquote><p>write a program to output the day number (column one) with the smallest temperature spread (the maximum temperature is the second column, the minimum the third column).</p></blockquote>
-
+<p>Liquid error: undefined method `map&#8217; for #&lt;String:0x007ff602af0578></p>
 
 <p>He provides a weather.dat file for you to download and which you will parse through in order to obtain the solution. In this post, I will only cover the first part of the code kata. I completed the first part of the kata over the course of 3 days working up to 4 hours on one day and thinking about the problem when not in front of the computer screen. Let&#8217;s take a look at a solution I developed.</p>
 
@@ -538,8 +537,8 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">regex</span><span class="sr"></span>
-</span><span class='line'><span class="sr">  /(\d+)\s+(\d+)\s+(\d+)/</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">regex</span>
+</span><span class='line'>  <span class="sr">/(\d+)\s+(\d+)\s+(\d+)/</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -693,7 +692,7 @@
 <h2>The Rules</h2>
 
 <ol>
-<li>Create a simple String calculator with a method <strong>int Add(string numbers)</strong>
+<li> Create a simple String calculator with a method <strong>int Add(string numbers)</strong>
 
 <ol>
 <li>The method can take 0, 1, or 2 numbers, and will return their sum (for an empty string it will return 0) for example &#8220;&#8221; or &#8220;1&#8221;, or &#8220;1,2&#8221;</li>
@@ -702,15 +701,15 @@
 <li>Remember to refactor after each passing test</li>
 </ol>
 </li>
-<li>Allow the Add method to handle an unknown amount of numbers</li>
-<li>Allow the Add method to handle new lines between numbers (instead of commas).
+<li> Allow the Add method to handle an unknown amount of numbers</li>
+<li> Allow the Add method to handle new lines between numbers (instead of commas).
 
 <ol>
 <li>The following input is OK: &#8220;1\n2,3&#8221; (will equal 6)</li>
 <li>The following input is NOT OK: &#8220;1,\n&#8221; (not need to price it - just clarifying)</li>
 </ol>
 </li>
-<li>Support different delimiters
+<li> Support different delimiters
 
 <ol>
 <li>To change a delimiter, the beginning of the string will contain a separate  line that looks like this: &#8220;//[delimiter]\n[numbers…]&#8221; for example &#8220;//;\n1;2&#8221; should return three where the default delimiter is &#8216;;&#8217;.</li>
@@ -1086,10 +1085,8 @@
 
 <p>In lesson 5 of <a href="http://rubymonk.com">RubyMonk.com</a>, there&#8217;s an exercise with the following objective:</p>
 
-<blockquote><p>to capitalize the first character of each part of the name as it combined them.</p></blockquote>
-
-
-<p>The code they provide is:</p>
+<p>Liquid error: undefined method `map&#8217; for #&lt;String:0x007ff602b452f8>
+The code they provide is:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1311,13 +1308,11 @@
 
 <p>I didn&#8217;t even know this would have been allowed as part of the spec. Below is a quote from Dave Thomas&#8217; CodeKata website:</p>
 
-<blockquote><p>A binary chop (sometimes called the more prosaic binary search) finds the position of value in a sorted array of values. It achieves some efficiency by halving the number of items under consideration each time it probes the values: in the first pass it determines whether the required value is in the top or the bottom half of the list of values. In the second pass in considers only this half, again dividing it in to two. It stops when it finds the value it is looking for, or when it runs out of array to search.</p></blockquote>
-
+<p>Liquid error: undefined method `map&#8217; for #&lt;String:0x007ff601a96128></p>
 
 <p>What I zeroed in on was this:</p>
 
-<blockquote><p>&#8230;in the first pass it determines whether the required value is in the top of bottom half of the list of values</p></blockquote>
-
+<p>Liquid error: undefined method `map&#8217; for #&lt;String:0x007ff601aa8328></p>
 
 <p>I thought that the implementation involved the decision-making logic of an if-else construct where you would check if the required value is in the top half or bottom half of the list of values. That was my train of thought. But nowhere in that sentence does it say you have to use an if-else construct. To me, the sentence is misleading. Perhaps I read too much into it which ultimately led to my brain focusing on solutions that only used if-else constructs.</p>
 
@@ -1366,8 +1361,7 @@
 
 <p>Dave Thomas hints at a third solution:</p>
 
-<blockquote><p>&#8230;one might use a functional style passing array slices around&#8230;</p></blockquote>
-
+<p>Liquid error: undefined method `map&#8217; for #&lt;String:0x007ff601a9f2c8></p>
 
 <p>Let&#8217;s see how well I fare solving it in that style.</p>
 </div>
@@ -1586,7 +1580,7 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">SomegenGenerator</span> <span class="o">&lt;</span> <span class="no">Rails</span><span class="o">::</span><span class="no">Generators</span><span class="o">::</span><span class="no">Base</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">SomegenGenerator</span> <span class="o">&lt;</span> <span class="ss">Rails</span><span class="p">:</span><span class="ss">:Generators</span><span class="o">::</span><span class="no">Base</span>
 </span><span class='line'> <span class="n">source_root</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;../templates&#39;</span><span class="p">,</span> <span class="bp">__FILE__</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'> <span class="k">def</span> <span class="nf">install</span>
@@ -1613,7 +1607,7 @@
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Issue3153/lib/generators/something/something_generator.rb</span>
-</span><span class='line'><span class="k">class</span> <span class="nc">SomethingGenerator</span> <span class="o">&lt;</span> <span class="no">Rails</span><span class="o">::</span><span class="no">Generators</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">SomethingGenerator</span> <span class="o">&lt;</span> <span class="ss">Rails</span><span class="p">:</span><span class="ss">:Generators</span><span class="o">::</span><span class="no">Base</span>
 </span><span class='line'>  <span class="n">source_root</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;../templates&#39;</span><span class="p">,</span> <span class="bp">__FILE__</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">def</span> <span class="nf">install</span>
@@ -1733,7 +1727,7 @@
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2012 - Daniel Dyba -
+  Copyright &copy; 2013 - Daniel Dyba -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
