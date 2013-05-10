@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | Daniel Dyba]]></title>
   <link href="http://danieldyba.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://danieldyba.com/"/>
-  <updated>2013-05-09T18:43:18-07:00</updated>
+  <updated>2013-05-09T21:41:58-07:00</updated>
   <id>http://danieldyba.com/</id>
   <author>
     <name><![CDATA[Daniel Dyba]]></name>
@@ -24,7 +24,9 @@
 
 <p>The fourth Code Kata in Dave Thomas' Code Kata blog asks you to do the following:</p>
 
-<p><blockquote><p>write a program to output the day number (column one) with the smallest temperature spread (the maximum temperature is the second column, the minimum the third column).</p></blockquote></p>
+<p>{% blockquote %}
+write a program to output the day number (column one) with the smallest temperature spread (the maximum temperature is the second column, the minimum the third column).
+{% endblockquote %}</p>
 
 <p>He provides a weather.dat file for you to download and which you will parse through in order to obtain the solution. In this post, I will only cover the first part of the code kata. I completed the first part of the kata over the course of 3 days working up to 4 hours on one day and thinking about the problem when not in front of the computer screen. Let's take a look at a solution I developed.</p>
 
@@ -625,7 +627,9 @@ The new solution is <strong>40% faster</strong> than the solution in my previous
 
 <p>In lesson 5 of <a href="http://rubymonk.com">RubyMonk.com</a>, there's an exercise with the following objective:</p>
 
-<p><blockquote><p>to capitalize the first character of each part of the name as it combined them.</p></blockquote>
+<p>{% blockquote %}
+to capitalize the first character of each part of the name as it combined them.
+{% endblockquote %}
 The code they provide is:
 ```ruby</p>
 
@@ -774,11 +778,15 @@ chop(int, array[mid + 1..-1])
 
 <p>I didn't even know this would have been allowed as part of the spec. Below is a quote from Dave Thomas' CodeKata website:</p>
 
-<p><blockquote><p>A binary chop (sometimes called the more prosaic binary search) finds the position of value in a sorted array of values. It achieves some efficiency by halving the number of items under consideration each time it probes the values: in the first pass it determines whether the required value is in the top or the bottom half of the list of values. In the second pass in considers only this half, again dividing it in to two. It stops when it finds the value it is looking for, or when it runs out of array to search.</p></blockquote></p>
+<p>{% blockquote %}
+A binary chop (sometimes called the more prosaic binary search) finds the position of value in a sorted array of values. It achieves some efficiency by halving the number of items under consideration each time it probes the values: in the first pass it determines whether the required value is in the top or the bottom half of the list of values. In the second pass in considers only this half, again dividing it in to two. It stops when it finds the value it is looking for, or when it runs out of array to search.
+{% endblockquote %}</p>
 
 <p>What I zeroed in on was this:</p>
 
-<p><blockquote><p>...in the first pass it determines whether the required value is in the top of bottom half of the list of values</p></blockquote></p>
+<p>{% blockquote %}
+...in the first pass it determines whether the required value is in the top of bottom half of the list of values
+{% endblockquote %}</p>
 
 <p>I thought that the implementation involved the decision-making logic of an if-else construct where you would check if the required value is in the top half or bottom half of the list of values. That was my train of thought. But nowhere in that sentence does it say you have to use an if-else construct. To me, the sentence is misleading. Perhaps I read too much into it which ultimately led to my brain focusing on solutions that only used if-else constructs.</p>
 
@@ -811,7 +819,9 @@ Stephen's solution starts by checking the 0 index of the array. I went ahead and
 
 <p>Dave Thomas hints at a third solution:</p>
 
-<p><blockquote><p>...one might use a functional style passing array slices around...</p></blockquote></p>
+<p>{% blockquote %}
+...one might use a functional style passing array slices around...
+{% endblockquote %}</p>
 
 <p>Let's see how well I fare solving it in that style.</p>
 ]]></content>
