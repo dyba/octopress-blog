@@ -4,52 +4,60 @@
         <loc>
             http://danieldyba.com/blog/2011/10/16/using-bundle-install-in-a-rails-3-generator/
         </loc>
-        <lastmod>2013-03-31T10:43:42-07:00</lastmod>
+        <lastmod>2013-03-31T15:51:28-07:00</lastmod>
     </url>
     <url>
         <loc>http://danieldyba.com/blog/2011/11/07/karate-chop-code-kata-first-run/</loc>
-        <lastmod>2013-03-31T10:43:42-07:00</lastmod>
+        <lastmod>2013-03-31T15:51:28-07:00</lastmod>
     </url>
     <url>
         <loc>http://danieldyba.com/blog/2011/11/11/karate-chop-code-kata-second-run/</loc>
-        <lastmod>2013-03-31T10:43:42-07:00</lastmod>
+        <lastmod>2013-03-31T15:51:28-07:00</lastmod>
     </url>
     <url>
         <loc>
             http://danieldyba.com/blog/2011/11/13/ruby-monk-problem-capitalizing-an-array-of-names/
         </loc>
-        <lastmod>2013-03-31T10:43:42-07:00</lastmod>
+        <lastmod>2013-03-31T15:51:28-07:00</lastmod>
     </url>
     <url>
         <loc>
             http://danieldyba.com/blog/2011/11/15/ruby-monk-problem-capitalizing-an-array-with-names-revisited/
         </loc>
-        <lastmod>2013-03-31T10:43:42-07:00</lastmod>
+        <lastmod>2013-03-31T15:51:28-07:00</lastmod>
     </url>
     <url>
         <loc>http://danieldyba.com/blog/2011/11/23/string-calculator-kata-without-if/</loc>
-        <lastmod>2013-03-31T10:43:42-07:00</lastmod>
+        <lastmod>2013-03-31T15:51:28-07:00</lastmod>
     </url>
     <url>
         <loc>
             http://danieldyba.com/blog/2011/11/25/code-kata-4-a-tdd-attempt-toward-readable-code/
         </loc>
-        <lastmod>2013-03-31T10:43:42-07:00</lastmod>
+        <lastmod>2013-03-31T15:51:28-07:00</lastmod>
     </url>
     <url>
         <loc>http://danieldyba.com/blog/2012/01/19/writing-my-first-usage-narrative/</loc>
-        <lastmod>2013-03-31T10:43:42-07:00</lastmod>
+        <lastmod>2013-03-31T15:51:28-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://danieldyba.com/blog/2013/05/08/getting-started-with-jstestdriver/</loc>
+        <lastmod>2013-05-09T18:11:33-07:00</lastmod>
     </url>
     <url>
         <loc>http://danieldyba.com/about/</loc>
-        <lastmod>2013-03-31T10:43:42-07:00</lastmod>
+        <lastmod>2013-03-31T15:51:28-07:00</lastmod>
     </url>
     <url>
         <loc>http://danieldyba.com/blog/archives/</loc>
-        <lastmod>2013-03-31T10:43:42-07:00</lastmod>
+        <lastmod>2013-05-09T18:11:33-07:00</lastmod>
     </url>
     <url>
         <loc>http://danieldyba.com/</loc>
-        <lastmod>2013-03-31T10:43:42-07:00</lastmod>
+        <lastmod>2013-05-09T18:11:33-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://danieldyba.com/robots.txt</loc>
+        <lastmod>2013-03-31T15:51:28-07:00</lastmod>
     </url>
 </urlset>

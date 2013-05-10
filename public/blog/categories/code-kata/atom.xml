@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Code Kata | Daniel Dyba]]></title>
+  <link href="http://danieldyba.com/blog/categories/code-kata/atom.xml" rel="self"/>
+  <link href="http://danieldyba.com/"/>
+  <updated>2013-05-09T18:15:08-07:00</updated>
+  <id>http://danieldyba.com/</id>
+  <author>
+    <name><![CDATA[Daniel Dyba]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Code Kata 4: A TDD Attempt Toward Readable Code]]></title>
+    <link href="http://danieldyba.com/blog/2011/11/25/code-kata-4-a-tdd-attempt-toward-readable-code/"/>
+    <updated>2011-11-25T13:02:00-08:00</updated>
+    <id>http://danieldyba.com/blog/2011/11/25/code-kata-4-a-tdd-attempt-toward-readable-code</id>
+    <content type="html"><![CDATA[<h2>Code Kata #4 - Data Munging Part One</h2>
+
+<h3>Overview</h3>
+
+<p>The fourth Code Kata in Dave Thomas' Code Kata blog asks you to do the following:</p>
+
+<p>{% blockquote %}
+write a program to output the day number (column one) with the smallest temperature spread (the maximum temperature is the second column, the minimum the third column).
+{% endblockquote %}</p>
+
+<p>He provides a weather.dat file for you to download and which you will parse through in order to obtain the solution. In this post, I will only cover the first part of the code kata. I completed the first part of the kata over the course of 3 days working up to 4 hours on one day and thinking about the problem when not in front of the computer screen. Let's take a look at a solution I developed.</p>
+
+<h3>The Completed Code</h3>
+
+<p>```ruby WeatherReader program at /lib/weather_reader.rb
+class WeatherReader
+  attr_reader :data, :spread</p>
+
+<p>  def read(filename)</p>
+
+<pre><code>@data = File.readlines(filename).reject(&amp;no_data)
+</code></pre>
+
+<p>  end</p>
+
+<p>  def date_of_smallest_spread</p>
+
+<pre><code>@data.map(&amp;spread).find_index(smallest_spread) + 1
+</code></pre>
+
+<p>  end</p>
+
+<p>  def smallest_spread</p>
+
+<pre><code>@data.map(&amp;spread).min
+</code></pre>
+
+<p>  end</p>
+
+<p>  def spread</p>
+
+<pre><code>@spread ||= -&gt;(line) { (temperature(line, :max) - temperature(line, :min)).abs }
+</code></pre>
+
+<p>  end</p>
+
+<p>  private</p>
+
+<pre><code>def temperature(line, kind)
+  line.match(regex)[kind].to_i
+end
+
+def no_data
+  -&gt;(line) { line.match(regex).nil? }
+end
+
+def regex
+  %r{
+    (?&lt;day&gt; \d+){0}
+    (?&lt;max&gt; \d+){0}
+    (?&lt;min&gt; \d+){0}
+
+    \g&lt;day&gt;\s+\g&lt;max&gt;\s+\g&lt;min&gt;
+  }x
+end
+</code></pre>
+
+<p>end</p>
+
+<p>```</p>
+
+<p>```ruby RSpec Examples /spec/weather_reader_spec.rb
+require 'rspec'
+require 'spec_helper'</p>
+
+<p>describe WeatherReader do
+  describe "Utility methods" do</p>
+
+<pre><code>let(:weather_reader) { WeatherReader.new }
+
+before(:each) do
+  @data = weather_reader.read("weather.dat")
+end
+
+it "filters lines that don't contain weather data" do
+  @data.should_not include(" MMU June 2002\n")
+end
+
+context "given a line containing weather data for a day" do
+  let(:line) { "   1  88    59    74          53.8       0.00 F       280  9.6 270  17  1.6  93 23 1004.5" }
+  it "returns the difference between the maximum temperature and minimum temperature" do
+    weather_reader.spread.call(line).should == 29
+  end
+end
+
+context "given lines containing weather data for several days" do
+  it "returns the smallest temperature spread" do
+    weather_reader.smallest_spread.should == 2
+  end
+
+  it "returns the date that had the smallest temperature spread" do
+    weather_reader.date_of_smallest_spread.should == 14
+  end
+end
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>```</p>
+
+<p>```bash Contents of the weather.dat file
+(Unofficial, Preliminary Data). Source: <a
+href="http://www.erh.noaa.gov/er/box/dailystns.html">www.erh.noaa.gov/er/box/dailystns.html</a></p>
+
+<pre>
+ MMU June 2002
+
+  Dy MxT   MnT   AvT   HDDay  AvDP 1HrP TPcpn WxType PDir AvSp Dir MxS SkyC MxR MnR AvSLP
+
+   1  88    59    74          53.8       0.00 F       280  9.6 270  17  1.6  93 23 1004.5
+   2  79    63    71          46.5       0.00         330  8.7 340  23  3.3  70 28 1004.5
+   3  77    55    66          39.6       0.00         350  5.0 350   9  2.8  59 24 1016.8
+   4  77    59    68          51.1       0.00         110  9.1 130  12  8.6  62 40 1021.1
+   5  90    66    78          68.3       0.00 TFH     220  8.3 260  12  6.9  84 55 1014.4
+   6  81    61    71          63.7       0.00 RFH     030  6.2 030  13  9.7  93 60 1012.7
+   7  73    57    65          53.0       0.00 RF      050  9.5 050  17  5.3  90 48 1021.8
+   8  75    54    65          50.0       0.00 FH      160  4.2 150  10  2.6  93 41 1026.3
+   9  86    32*   59       6  61.5       0.00         240  7.6 220  12  6.0  78 46 1018.6
+  10  84    64    74          57.5       0.00 F       210  6.6 050   9  3.4  84 40 1019.0
+  11  91    59    75          66.3       0.00 H       250  7.1 230  12  2.5  93 45 1012.6
+  12  88    73    81          68.7       0.00 RTH     250  8.1 270  21  7.9  94 51 1007.0
+  13  70    59    65          55.0       0.00 H       150  3.0 150   8 10.0  83 59 1012.6
+  14  61    59    60       5  55.9       0.00 RF      060  6.7 080   9 10.0  93 87 1008.6
+  15  64    55    60       5  54.9       0.00 F       040  4.3 200   7  9.6  96 70 1006.1
+  16  79    59    69          56.7       0.00 F       250  7.6 240  21  7.8  87 44 1007.0
+  17  81    57    69          51.7       0.00 T       260  9.1 270  29* 5.2  90 34 1012.5
+  18  82    52    67          52.6       0.00         230  4.0 190  12  5.0  93 34 1021.3
+  19  81    61    71          58.9       0.00 H       250  5.2 230  12  5.3  87 44 1028.5
+  20  84    57    71          58.9       0.00 FH      150  6.3 160  13  3.6  90 43 1032.5
+  21  86    59    73          57.7       0.00 F       240  6.1 250  12  1.0  87 35 1030.7
+  22  90    64    77          61.1       0.00 H       250  6.4 230   9  0.2  78 38 1026.4
+  23  90    68    79          63.1       0.00 H       240  8.3 230  12  0.2  68 42 1021.3
+  24  90    77    84          67.5       0.00 H       350  8.5 010  14  6.9  74 48 1018.2
+  25  90    72    81          61.3       0.00         190  4.9 230   9  5.6  81 29 1019.6
+  26  97*   64    81          70.4       0.00 H       050  5.1 200  12  4.0 107 45 1014.9
+  27  91    72    82          69.7       0.00 RTH     250 12.1 230  17  7.1  90 47 1009.0
+  28  84    68    76          65.6       0.00 RTFH    280  7.6 340  16  7.0 100 51 1011.0
+  29  88    66    77          59.7       0.00         040  5.4 020   9  5.3  84 33 1020.6
+  30  90    45    68          63.6       0.00 H       240  6.0 220  17  4.8 200 41 1022.7
+  mo  82.9  60.5  71.7    16  58.8       0.00              6.9          5.3
+</pre>
+
+
+<p>```</p>
+
+<h2>TDD is Software Improv</h2>
+
+<p>It is unfortunate that I didn't capture the dynamic interplay between writing/rewriting the tests and writing/rewriting the code in this example. I think I originally heard it from David Chelimsky at SCNA 2011 who said that Test Driven Development is Software Improv. TDD is a sweeping movement involving writing your tests, writing code to pass your tests, refactoring your code, refactoring your tests, critiquing your code to determine how you should write your next test, and critiquing your tests to inform the design of your code. TDD truly is an art form.</p>
+
+<p>Even as I write this post, I understand how difficult it is to capture the TDD process in writing. Have you ever seen Live Improv as a series of photos? For one thing, you won't catch the humor in the dialogue. You might laugh at the pictures, but you won't get the jokes unless you had understood the context in which they were delivered; that's where the dialogue is important. But listening to the dialogue alone isn't enough. You wouldn't be able to capture the subtle nuances in the gestures of the performers. The photos wouldn't capture that because they are minutes, even seconds apart. Now what happens if you see Live Improv as an audience member? You finally get it. In the same way, TDD cannot be expressed as a static blog post. I do not do it justice by simply talking about it; however, I will do my best to inform you what happens in the process of doing TDD.</p>
+
+<h2>Debrief</h2>
+
+<h3>How'd you get there?</h3>
+
+<p>At the beginning, I started writing very trivial test cases that would check for the return type of the <code>read</code> method. It would check to make sure that the return values were not nil. Of course, you don't see these test cases in the final product. That's because those tests acted like scaffolding that I temporarily used to get me started. After I build the right structure in my program, I wrote other tests that rendered that scaffolding test code obsolete.</p>
+
+<p>TDD is an incremental process. You should only be writing the minimal amount of code to make your tests pass. I think this is where I didn't do as great a job executing TDD. Once I understood the pattern of the code I needed to write, I went ahead and wrote that as production code. In the real world, the patterns won't be as obvious and it will take having to write code for every case until you see an overarching picture of the kind of code that would cover the general case.</p>
+
+<p>The example I will cite here is when I test a single line of data to determine if I get the right value for the spread of the maximum and minimum temperature. The next thing I do is write the code that does that for every line of code. Probably the way I should have gone about that was to write a regular expression that was hardcoded to that particular string. Then I should have thrown in another case where there is an asterisk next to the maximum or minimum temperature as is true for day 9 or day 26 in the weather.dat file. When you work on a larger project, it may not be obvious how you can generalize the production code you need to write. Thus, it is a good habit to build your program incrementally when you do TDD.</p>
+
+<h3>Programming With Lambdas</h3>
+
+<p>Recently, I have been making more of an effort to introduce lambdas in my code. Lambdas and Procs were one of the most nebulous ideas for me when I first started programming in Ruby. Only recently did I start playing with passing lambdas as arguments to methods. Originally, the <code>no_data</code> method wasn't in my code. It came about during the refactoring phase when I wanted to make the read method more concise (and curiously also wanted to see if I could extract the code block into something more meaningful). The code had read like so:</p>
+
+<p>```ruby
+def read(filename)
+  File.readlines(filename) do |line|</p>
+
+<pre><code>line.match(regex).nil?
+</code></pre>
+
+<p>  end
+end
+```
+Now, there's nothing wrong with that. However, if I were another programmer trying to read this code, I would be asking myself, "What are you matching against?" So I decided to write this instead:</p>
+
+<p><code>ruby
+def read(filename)
+  File.readlines(filename).reject(&amp;no_data)
+end
+</code>
+To me that reads more clearly than the first example. It may be a little difficult for newer programmers to understand what the syntax is doing. But it is clear that I am rejecting data from the lines of the file I read. Here is the code for the <code>no_data</code> method.</p>
+
+<p><code>ruby
+def no_data
+  -&gt;(line) { line.match(regex).nil? }
+end
+</code>
+The name of the method communicates its function. It defines what data is not; however, I probably could have written a different name for <code>regex</code>. Looking at it right now it doesn't communicate its intent. Perhaps, I should have written something like this:</p>
+
+<p><code>ruby
+def no_data
+  -&gt;(line) { line.match(weather_data).nil? }
+end
+</code>
+That would have been more helpful to someone who is trying to find out how the <code>no_data</code> method works.</p>
+
+<h3>Being Expressive with Regular Expressions</h3>
+
+<p>If that same programmer wanted to see what <code>regex</code> would look like, they would see this:</p>
+
+<p>```ruby
+def regex
+  %r{</p>
+
+<pre><code>(?&lt;day&gt; \d+){0}
+(?&lt;max&gt; \d+){0}
+(?&lt;min&gt; \d+){0}
+
+\g&lt;day&gt;\s+\g&lt;max&gt;\s+\g&lt;min&gt;
+</code></pre>
+
+<p>  }x
+end</p>
+
+<p><code>
+Originally, I had written down this expression:
+</code>ruby
+def regex
+  /(\d+)\s+(\d+)\s+(\d+)/
+end
+<code>
+What is that expression supposed to be doing? It is capturing three groups of numbers that are separated by spaces. But those numbers don't have any meaning at all! That's when I decided to use the 'x' option to allow spaces in my regular expression. I went ahead and added named subroutines in order to layer the regular expression with meaning. Notice that I named the groups as</code><day><code>,</code><max><code>,</code><min><code>---all names that are relevant to the problem at hand. Unfortunately, those names alone don't provide much meaning to the problem, I probably should have been a bit more descriptive with the names: "Maximum of what?", "Minimum of what?" "Are we talking about heights? weights? distances?" A better implementation would have been:
+</code>ruby
+def weather_data
+  %r{</p>
+
+<pre><code>(?&lt;day&gt;             \d+){0}
+(?&lt;max_temperature&gt; \d+){0}
+(?&lt;min_temperature&gt; \d+){0}
+
+\g&lt;day&gt;\s+\g&lt;max_temperature&gt;\s+\g&lt;min_temperature&gt;
+</code></pre>
+
+<p>  }x
+end</p>
+
+<p><code>
+The reason why I didn't add the names</code>max_temperature<code>, and</code>min_temperature<code>, was because of the way I implemented the</code>temperature``` method in my program.</p>
+
+<h3>Something Smells</h3>
+
+<p>Take a look at the following code:
+```ruby
+  def spread</p>
+
+<pre><code>@spread ||= -&gt;(line) { (temperature(line, :max) - temperature(line, :min)).abs }
+</code></pre>
+
+<p>  end</p>
+
+<p>  private</p>
+
+<pre><code>def temperature(line, kind)
+  line.match(regex)[kind].to_i
+end
+</code></pre>
+
+<p><code>
+Had I changed the names in my regular expressions, I would have had to change the above code to this:
+</code>ruby
+  def spread</p>
+
+<pre><code>@spread ||= -&gt;(line) { (temperature(line, :max_temperature) - temperature(line, :min_temperature)).abs }
+</code></pre>
+
+<p>  end</p>
+
+<p>  private</p>
+
+<pre><code>def temperature(line, kind)
+  line.match(regex)[kind].to_i
+end
+</code></pre>
+
+<p><code>
+Why is temperature mentioned twice in a method call? It is adding too much noise. I should have just gotten rid of the</code>temperature``` method and attempted a better implementation like so:</p>
+
+<p>```ruby
+  def spread</p>
+
+<pre><code>@spread ||= -&gt;(line) { (line.match(weather_data)[:max_temperature].to_i - line.match(weather_data)[:min_temperature].to_i).abs }
+</code></pre>
+
+<p>  end</p>
+
+<p>  private
+=begin
+Smells bad</p>
+
+<pre><code>def temperature(line, kind)
+  line.match(regex)[kind].to_i
+end
+</code></pre>
+
+<p>=end
+```
+Even the above implementation is too long to read, but it communicates its intent better than the method I had written.</p>
+
+<h2>Take Aways</h2>
+
+<p>When doing TDD, you always need to keep in mind the other programmer who will be reading your code. It is not enough to make the program work; it needs to be readable and easy to understand for the rest of your team.</p>
+
+<p>There are other things I didn't get a chance to cover in this post that would have made it too long: one of those things included the implementation of finding the smallest spread and the date for that spread. I'd like to see your implementation of this code kata. Perhaps there is some other way of implementing this that had not occurred to me. I welcome your insight. I invite you to provide any feedback in the comments below.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[String Calculator Kata Without If, Else, Switch, or Case]]></title>
+    <link href="http://danieldyba.com/blog/2011/11/23/string-calculator-kata-without-if/"/>
+    <updated>2011-11-23T14:06:00-08:00</updated>
+    <id>http://danieldyba.com/blog/2011/11/23/string-calculator-kata-without-if</id>
+    <content type="html"><![CDATA[<p>The goal of this kata is to create a calculator that can add the numbers found in a string. I found this kata on <a href="http://osherove.com/tdd-kata-1/">Roy Osherove's website</a>. Here are the instructions for doing this kata:</p>
+
+<h2>String Calculator Kata Overview</h2>
+
+<h2>The Rules</h2>
+
+<ol>
+<li>Create a simple String calculator with a method <strong>int Add(string numbers)</strong>
+
+<ol>
+<li>The method can take 0, 1, or 2 numbers, and will return their sum (for an empty string it will return 0) for example "" or "1", or "1,2"</li>
+<li>Start with the simplest test case of an empty string and move to 1 and two numbers</li>
+<li>Remember to solve things as simply as possible so that you force yourself to write tests you did not think about</li>
+<li>Remember to refactor after each passing test</li>
+</ol>
+</li>
+<li>Allow the Add method to handle an unknown amount of numbers</li>
+<li>Allow the Add method to handle new lines between numbers (instead of commas).
+
+<ol>
+<li>The following input is OK: "1\n2,3" (will equal 6)</li>
+<li>The following input is NOT OK: "1,\n" (not need to price it - just clarifying)</li>
+</ol>
+</li>
+<li>Support different delimiters
+
+<ol>
+<li>To change a delimiter, the beginning of the string will contain a separate  line that looks like this: "//[delimiter]\n[numbers…]" for example "//;\n1;2" should return three where the default delimiter is ';'.</li>
+</ol>
+</li>
+</ol>
+
+
+<p>There are more instructions to this kata but that was as far as I was able to get without going too far over the time limit. I imposed a 30 minute time limit to complete this kata.</p>
+
+<h3>Constraints Inspire Creative-Thinking</h3>
+
+<p>I want to make a very important observation here. I could have solved this kata with programming techniques with which I am familiar; however, familiarity does not breed creativity. If you want to take your creativity to the next level, you need to put constraints. Constraints are your friends. They are the ones that prod you to think about novel ways of doing things. In this kata, I added the constraint of avoiding these keywords:</p>
+
+<ul>
+<li>  <code>if</code></li>
+<li>  <code>else</code></li>
+<li>  <code>switch</code></li>
+<li>  <code>case</code></li>
+</ul>
+
+
+<p>It's amazing what you'll discover when you impose these constraints. I began to write my solution in a Lispy sort of fashion as you'll soon see.</p>
+
+<h2>The Completed Kata</h2>
+
+<p>```ruby The Completed String Calculator Kata
+require 'rspec'</p>
+
+<p>class StringCalculator</p>
+
+<p>  def add(string)</p>
+
+<pre><code>string.empty? &amp;&amp; (return 0)
+string.end_with?("\n") &amp;&amp; (return nil)
+
+string.start_with?("//") &amp;&amp;
+  (@delimiter ||= string.match('^//(.)')[1]) &amp;&amp;
+    string.sub!(/^\/\/(.)/, '')
+
+string.include?("\n") &amp;&amp;
+  string.gsub!(/\n/, ' ')
+
+@delimiter &amp;&amp;
+  (return string.split("#{@delimiter}").map(&amp;:to_i).inject(&amp;:+))
+
+string.split(/[,\s]/).map(&amp;:to_i).inject(&amp;:+)
+</code></pre>
+
+<p>  end</p>
+
+<p>end</p>
+
+<p>describe StringCalculator do
+  let(:calc) { StringCalculator.new }</p>
+
+<p>  it "returns 0 for empty string" do</p>
+
+<pre><code>calc.add("").should == 0
+</code></pre>
+
+<p>  end</p>
+
+<p>  it "returns 1 for '1'" do</p>
+
+<pre><code>calc.add("1").should == 1
+</code></pre>
+
+<p>  end</p>
+
+<p>  it "returns 3 for '1,2'" do</p>
+
+<pre><code>calc.add("1,2").should == 3
+</code></pre>
+
+<p>  end</p>
+
+<p>  it "returns 55 for '1,2,3,4,5,6,7,8,9,10'" do</p>
+
+<pre><code>calc.add("1,2,3,4,5,6,7,8,9,10").should == 55
+</code></pre>
+
+<p>  end</p>
+
+<p>  it "returns 6 for '1\n2,3'" do</p>
+
+<pre><code>calc.add("1\n2,3").should == 6
+</code></pre>
+
+<p>  end</p>
+
+<p>  it "returns nil for '1,\n'" do</p>
+
+<pre><code>calc.add("1,\n").should be_nil
+</code></pre>
+
+<p>  end</p>
+
+<p>  context "when changing the delimiter to ';'" do</p>
+
+<pre><code>it "returns 3 for '//;\\n1;2" do
+  calc.add("//;\n1;2").should == 3
+end
+</code></pre>
+
+<p>  end</p>
+
+<p>  context "when changing the delimiter to ': and terminating the string with '\n'" do</p>
+
+<pre><code>it "returns nil for '//:\\n1:\\n" do
+  calc.add("//:\n1:\n").should be_nil
+end
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<h3>Lispifying The Solution</h3>
+
+<p>Since I wasn't able to use the <code>if</code>, <code>else</code>, <code>switch</code>, and <code>case</code> keywords, I had to think of a new way of having my program make decisions. I observed that I was using methods that returned booleans such as <code>empty?</code>, <code>start_with?</code>, <code>end_with?</code>, and <code>include?</code>. My mind was screaming at me: "USE AN IF STATEMENT HERE!" I refrained. All I knew was that I wanted my program to make decisions based on whether or not the results of those method calls were true. Then I had my 'Ah ha!' moment. Part of what led me to use the <code>&amp;&amp;</code> operator in my code came about because I am learning Common Lisp. Here is a snippet of Lisp code that checks to see if an atom belongs to a list:</p>
+
+<p>```ruby
+(defun member? (a lst)
+  (cond</p>
+
+<pre><code>((null lst) nil)
+(T (or
+     (eq a (car lst))
+     (member? a (cdr lst))))))
+</code></pre>
+
+<p><code>
+Take a look at the OR statement. If the atom</code>a<code>is equal to the first item of the list in</code>lst<code>, then</code>member?<code>returns true and it exits the function; otherwise it will evaluate the statement</code>member?<code>and pass the atom</code>a<code>and the remaining items in the</code>lst<code>not including the first item. Did you see how you can use an a function call as a statement to be used with an</code>or<code>operator? In my solution, I went ahead and using this logic except I used the</code>&amp;&amp;``` operator to accomplish this. Let's walk through some of the code in the solution.</p>
+
+<h3>A Walkthrough</h3>
+
+<p>We begin by recalling the requirements of the string calculator. The first requirement is to return 0 for an empty string. To meet that requirement, I write code to query the string and ask if it is <code>empty?</code>. When I pass an empty string, the response will be <code>true</code>. Since the statement to the left of the <code>&amp;&amp;</code> operator is true, the <code>&amp;&amp;</code> must take the next step of evaluating the statement to the right.
+<code>ruby
+ string.empty? &amp;&amp; (return 0)
+</code>
+The statement on the right is a <code>return</code> statement, so we leave the <code>add</code> function with the result of <code>0</code> for an empty string. The same logic applies to the next call <code>end_with?</code>.
+```ruby</p>
+
+<pre><code>string.end_with?("\n") &amp;&amp; (return nil)
+</code></pre>
+
+<p><code>
+If the string ends with a newline character</code>"\n"<code>, the</code>&amp;&amp;``` operator is forced to execute the statement to the right.</p>
+
+<p>In the next few lines, I took the <code>&amp;&amp;</code> operator further. I know that all Ruby objects return <code>true</code>. With that understanding, I went ahead and chained three statements with the <code>&amp;&amp;</code> operator:</p>
+
+<p>```ruby</p>
+
+<pre><code>string.start_with?("//") &amp;&amp;
+  (@delimiter ||= string.match('^//(.)')[1]) &amp;&amp;
+    string.sub!(/^\/\/(.)/, '')
+</code></pre>
+
+<p><code>
+Doesn't that cascading style remind you of Lisp? I think this is really cool! This code covers the case when the user wants to change the delimiter in the string. Instead of using commas and passing a string such as</code>"1,2"<code>, the user can now pass a string like this:</code>"//;\n1;2"<code>. Passing this kind of string to the</code>add<code>method should change the delimiter from a comma to a semicolon. Let's suppose we receive the string</code>"//;\n1;2"<code>. We see it starts with</code>"//"<code>so the method</code>start_with?<code>returns</code>true<code>. Since we are</code>&amp;&amp;<code>ing our statements together, all of them must return true in order for all three to be executed, otherwise, we will skip to the next portion of the program. The next step involves capturing the new delimiter and caching the results to the</code>@delimiter<code>instance variable. That entire statement returns true because at the end</code>@delimiter``` has a non-nil value. We move on to the next statement, which removes the delimiter information from the original string so that we can parse the number information.</p>
+
+<p>This next line is my favorite one.</p>
+
+<p>```ruby</p>
+
+<pre><code>@delimiter &amp;&amp;
+  (return string.split("#{@delimiter}").map(&amp;:to_i).inject(&amp;:+))
+</code></pre>
+
+<p>```</p>
+
+<p>Since we received a cached result from the previous chain of statements for <code>@delimiter</code>, <code>@delimiter</code> is a non-nil object which evaluates to <code>true</code>. Since <code>@delimiter</code> evaluates to <code>true</code>, we move to the next statement and evaluate it. I especially like how I passed the methods <code>to_i</code> and <code>+</code> as symbols to the <code>map</code> and <code>inject</code> methods. It saved me space and communicates its intent! We split on the new delimiter, convert each string represented as a number to an integer, and then collect a running sum and return the result.</p>
+
+<h2>Take Aways</h2>
+
+<p>The most valuable thing I got from having done this kata were the constraints I placed on myself. They pushed me outside of the comfort of the familiar techniques I used and demanded more from me. I did notice the repetition toward the bottom of the <code>add</code> method. I had some difficulty refactoring the code in time. Perhaps next time I perform this kata, I'll have a DRYer version.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Karate Chop Code Kata - Second Run]]></title>
+    <link href="http://danieldyba.com/blog/2011/11/11/karate-chop-code-kata-second-run/"/>
+    <updated>2011-11-11T12:41:00-08:00</updated>
+    <id>http://danieldyba.com/blog/2011/11/11/karate-chop-code-kata-second-run</id>
+    <content type="html"><![CDATA[<h2>Several Attempts With No Solution In Sight</h2>
+
+<p>The second run at implementing the binary chop method was excruciating. After several attempts, I finally decided to check out what others were doing. Was I blinded to a particular kind of solution I had in mind? Was my understanding of recursion incorrect? I felt I probably had a blind spot that was keeping me from seeing the problem in a new way. After going out on a Google search for the solution, I came across <a href="http://softwareramblings.com/2009/11/codekata-kata-two-solution.html">Stephen Doyle's Blog</a></p>
+
+<p>Here is his solution:</p>
+
+<p>```ruby Stephen Doyle's Solution
+def chop(target, values)
+  # Special handling for zero and single element arrays
+  return -1 if values.empty?</p>
+
+<p>  return ((target == values[0]) ? 0 : -1) if values.length == 1</p>
+
+<p>  # Try the bottom half first
+  pos = chop(target, values[0, values.length/2])
+  return pos if pos != -1</p>
+
+<p>  # Then the upper half ... remember that the returned
+  # position is relative to the middle of the array.
+  pos = chop(target, values[values.length/2, values.length-1])
+  return pos + (values.length/2) if pos != -1</p>
+
+<p>  # Didn't find what we were looking for
+  return -1</p>
+
+<p>end
+```</p>
+
+<p>Since I didn't solve this, I'm going to talk about some of the approaches I took while trying to solve this problem and why they failed.</p>
+
+<h2>My Failed Ideas</h2>
+
+<h3>The Tweaking Approach</h3>
+
+<p>I solved the problem once. What if I reused the same ideas but changed things just a bit? Here is what I came up with.</p>
+
+<p>```ruby
+defchop(int,array_of_int)
+  return -1 if array_of_int.empty?</p>
+
+<p>  @max ||= array_of_int.size - 1
+  @min ||= 0
+  @mid ||= @max / 2 + @min</p>
+
+<p>  return @mid if int == array_of_int[@mid]</p>
+
+<p>  return -1 if @mid == @max</p>
+
+<p>  if int &lt; array_of_int[@mid]</p>
+
+<pre><code>@max = @mid
+</code></pre>
+
+<p>  else</p>
+
+<pre><code>@min = @mid
+</code></pre>
+
+<p>  end</p>
+
+<p>  chop(int,array_of_int)
+end
+```</p>
+
+<p>As you can see, it uses the same idea of markers to indicate which portion of the array I am focusing on. The problem was I used instance variables to maintain state in subsequent calls to the chop method. This was a bad idea because it gave me bogus results in between assertions in my test suite. So I had to do away with instance variables as a way to maintain state.</p>
+
+<h3>The If-Else Construct Approach</h3>
+
+<p>You can see that from the above attempt, I continued using the if-else construct to determine which path to take in order to find the index of the integer. I used this for EVERY solution thereafter. That If-Else construct stuck to me like a leech. I didn't even think of the possibility of doing away with it because I thought that was the only way you could traverse a binary tree. One approach I didn't consider was simply picking one half of the array and carrying out the search until you find nothing; only then would you search for the other half. I kept thinking I MUST know whether it is greater or smaller than the integer found at the midpoint of the array. Later in this post, I discuss why I got stuck to the if-else construct approach.</p>
+
+<h2>My Successful Ideas</h2>
+
+<p>Even as I was making several attempts at the solution, there was one approach I took that led me closer to the solution.</p>
+
+<h3>Passing Smaller Array Slices Approach</h3>
+
+<p>What I did figure out was that I needed to call the chop method and pass it a smaller slice of the array. If the integer was less than the integer I found at the midpoint, I would call the chop method like so:</p>
+
+<p><code>ruby
+chop (int, array[0..mid-1])
+</code></p>
+
+<p>If the integer was greater than the integer I found at the midpoint, I would call the chop method like so:</p>
+
+<p><code>ruby
+chop(int, array[mid + 1..-1])
+</code></p>
+
+<p>This approach is one which Stephen Doyle used when solving the problem with recursion. I was on the right track.</p>
+
+<h2>The Missing Links</h2>
+
+<p>Stepping back and seeing Doyle's recursive solution, I noticed there were a few things I didn't understand which hampered my progress toward a solution.</p>
+
+<h3>Just Pick a Slice!</h3>
+
+<p>I didn't even know this would have been allowed as part of the spec. Below is a quote from Dave Thomas' CodeKata website:</p>
+
+<p>{% blockquote %}
+A binary chop (sometimes called the more prosaic binary search) finds the position of value in a sorted array of values. It achieves some efficiency by halving the number of items under consideration each time it probes the values: in the first pass it determines whether the required value is in the top or the bottom half of the list of values. In the second pass in considers only this half, again dividing it in to two. It stops when it finds the value it is looking for, or when it runs out of array to search.
+{% endblockquote %}</p>
+
+<p>What I zeroed in on was this:</p>
+
+<p>{% blockquote %}
+...in the first pass it determines whether the required value is in the top of bottom half of the list of values
+{% endblockquote %}</p>
+
+<p>I thought that the implementation involved the decision-making logic of an if-else construct where you would check if the required value is in the top half or bottom half of the list of values. That was my train of thought. But nowhere in that sentence does it say you have to use an if-else construct. To me, the sentence is misleading. Perhaps I read too much into it which ultimately led to my brain focusing on solutions that only used if-else constructs.</p>
+
+<p>Stephen's solution involves picking the bottom slice first. If the integer is not in the bottom slice, then the logic will go on to check the top slice until it finds the integer or returns a <code>-1</code> to indicate it found no matching integer.</p>
+
+<h2>The Solution</h2>
+
+<p>There are a few things I would change in Stephen's solution to make things a little more concise. Here is my solution:</p>
+
+<p>```ruby Karate Chop Code Kata - Second Run https://github.com/dyba/katas-samples/blob/master/karate_chop/karate_chop_2.rb See on Github
+def chop(int, array_of_int)
+  return -1 if array_of_int.empty?</p>
+
+<p>  mid = array_of_int.size / 2</p>
+
+<p>  return ((int == array_of_int[mid]) ? mid : -1) if array_of_int.size == 1</p>
+
+<p>  pos = chop(int, array_of_int[0...mid])
+  return pos if pos != -1</p>
+
+<p>  pos = chop(int, array_of_int[mid..-1])
+  return pos + mid if pos != -1</p>
+
+<p>  return -1
+end
+<code>
+Stephen's solution starts by checking the 0 index of the array. I went ahead and started in the middle. Also, by defining the midpoint with the</code>mid<code>variable, I can condense the portion of the array I pass to the chop method. I also went ahead and used ranges instead of the comma syntax inside the brackets. Rather than use</code>array_of_int[array_of_int / 2, array_of_int.size - 1]```, I preferred the use of ranges and negative indexing to shorten the parameter I pass.</p>
+
+<h2>A Final Note</h2>
+
+<p>Dave Thomas hints at a third solution:</p>
+
+<p>{% blockquote %}
+...one might use a functional style passing array slices around...
+{% endblockquote %}</p>
+
+<p>Let's see how well I fare solving it in that style.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Karate Chop Code Kata - First Run]]></title>
+    <link href="http://danieldyba.com/blog/2011/11/07/karate-chop-code-kata-first-run/"/>
+    <updated>2011-11-07T18:40:00-08:00</updated>
+    <id>http://danieldyba.com/blog/2011/11/07/karate-chop-code-kata-first-run</id>
+    <content type="html"><![CDATA[<h2>The Idea</h2>
+
+<p>Here is my first attempt at Code Kata #2 - Karate Chop, which is an exercise you can find on Dave Thomas' website <a href="http://codekata.pragprog.com/2007/01/kata_two_karate.html">Code Kata</a>. Now mind you, I never had a formal introduction to computer algorithms. I had to look at a computer algorithms book to make sure I understood what was meant by the term binary search routine. The idea behind Karate Chop is to write a binary search routine that takes an integer and an array, splits the array in two, determines which half of the array the integer should be on and repeats the process until it finds the integer and returns it or doesn't find it and returns a <code>-1</code>. In the end I should have a function that can be described as follows:</p>
+
+<p><code>ruby
+chop(integer, array_of_integers) =&gt; integer
+</code></p>
+
+<p>The integer it returns should be the index of the array in which I found the matching number. In the event that I do not find the integer in the array, I should get a <code>-1</code>.</p>
+
+<h2>The Solution</h2>
+
+<p>```ruby Karate Chop Code Kata - First Run https://github.com/dyba/katas-samples/blob/master/karate_chop/karate_chop.rb See On Github
+def chop(int,array_of_int)
+  return -1 if array_of_int.empty?</p>
+
+<p>  min, max = 0, array_of_int.size - 1
+  midpoint = max / 2</p>
+
+<p>  while int != array_of_int[midpoint]</p>
+
+<pre><code>if int &lt; array_of_int[midpoint]
+  max = midpoint - 1
+else
+  min = midpoint + 1
+end
+
+
+midpoint = min + (max - min) / 2
+return -1 if max &lt; min || min &gt; midpoint
+</code></pre>
+
+<p>  end</p>
+
+<p>  midpoint
+end
+```</p>
+
+<h2>The Walkthrough</h2>
+
+<h3>Edge Cases</h3>
+
+<p>I implement the binary search routine using a while loop. I address the the edge case when the array is empty. When that hapens, I know that I must return <code>-1</code> because no integer will ever be present in an empty array.</p>
+
+<p><code>ruby
+return -1 if array_of_int.empty?
+</code></p>
+
+<h3>Markers Point You In the Right Direction</h3>
+
+<p>In this solution, I use markers to let me know what portion of the array I am focusing on. I start off by initializing my markers. I have a min marker which tells me the first element of the array, and I have a max marker which tells me the last element of the array. The midpoint marker tells me which index is the midpoint of the array. These markers will change during the course of the program as I search through smaller subsections of the array.</p>
+
+<p><code>ruby
+  min, max = 0, array_of_int.size - 1
+  midpoint = max / 2
+</code></p>
+
+<h3>The Search Is On</h3>
+
+<p>Now comes the interesting part, the loop construct. I decided to use the while loop to iterate through the array because it was the first solution that came to mind. Only if I found the matching integer would I exit the while loop and return the index of the array in which I found the matching number.</p>
+
+<p><code>ruby
+while int != array_of_int[midpoint]
+</code></p>
+
+<p>Inside the while loop, I check for the condition where the integer I seek is less than the integer I find at the midpoint of the array. If it is less, then I move my max marker to 1 less than the midpoint; if more, then I move my min marker to 1 more than the midpoint. This is easily illustrated with a diagram.</p>
+
+<p>```ruby</p>
+
+<pre><code>if int &lt; array_of_int[midpoint]
+  max = midpoint - 1
+else
+  min = midpoint + 1
+end
+</code></pre>
+
+<p>```</p>
+
+<p>Notice that with each iteration, I am focusing on a smaller portion of the array. After the if-else construct, I advance the midpoint marker to reflect the new midpoint for the smaller portion of the array that I am focusing on.</p>
+
+<p>```ruby</p>
+
+<pre><code>midpoint = min + (max - min) / 2
+</code></pre>
+
+<p>```</p>
+
+<h3>When Markers Go Wrong</h3>
+
+<p>Here is where it gets tricky. A strange thing happens when the integer is not present in the array: the max, min, and midpoint markers go berserk! They no longer begin to make sense. That's when I know it's time to jump out of the loop and return a <code>-1</code> to indicate that there was no matching integer inside the array.</p>
+
+<p>```ruby</p>
+
+<pre><code>return -1 if max &lt; min || min &gt; midpoint
+</code></pre>
+
+<p>```</p>
+
+<p>Finally, the last line returns the index of the array that matched the integer I passed to the function.</p>
+
+<p><code>ruby
+  midpoint
+</code></p>
+
+<h2>A Final Note</h2>
+
+<p>Don't let my explanation fool you, this was a difficult exercise for me. At first I was thinking about chopping the array in half and then searching through each half iterating through each element one by one to see if I found the integer. That wasn't the correct way to go about it; it would have been an incorrect implementation of a binary search. When you come across unfamiliar terms, you must start by understanding those terms before you can tackle a problem. My problem was that I didn't understand the idea of a binary search.</p>
+
+<p>This exercise took me somewhere close to 8 hours. I'm hoping to cut my time in half in the next implementation. Stick around as I try to solve this again using a different implementation.</p>
+]]></content>
+  </entry>
+  
+</feed>

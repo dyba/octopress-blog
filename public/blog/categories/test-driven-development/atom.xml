@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Test Driven Development | Daniel Dyba]]></title>
+  <link href="http://danieldyba.com/blog/categories/test-driven-development/atom.xml" rel="self"/>
+  <link href="http://danieldyba.com/"/>
+  <updated>2013-05-09T18:15:08-07:00</updated>
+  <id>http://danieldyba.com/</id>
+  <author>
+    <name><![CDATA[Daniel Dyba]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Getting started with JsTestDriver]]></title>
+    <link href="http://danieldyba.com/blog/2013/05/08/getting-started-with-jstestdriver/"/>
+    <updated>2013-05-08T20:31:00-07:00</updated>
+    <id>http://danieldyba.com/blog/2013/05/08/getting-started-with-jstestdriver</id>
+    <content type="html"><![CDATA[<p>While reading <a href="http://www.amazon.com/Test-Driven-JavaScript-Development-Developers-Library/dp/0321683919" title="Test-Driven JavaScript Development on Amazon"><em>Test-Driven JavaScript Development</em></a> by <a href="http://cjohansen.no/en" title="Christian Johansen's Blog">Christian Johansen</a>, I decided to give Google's <a href="https://code.google.com/p/js-test-driver/" title="JsTestDriver Project Page on Google Code">JsTestDriver</a> a spin. JsTestDriver is a testing framework for JavaScript.</p>
+
+<h2>The 5,000 Foot View</h2>
+
+<p>There are three components involved when using JsTestDriver:</p>
+
+<ul>
+<li>The JsTestDriver server</li>
+<li>The Web Browser</li>
+<li>The JsTestDriver runner</li>
+</ul>
+
+
+<p>The JsTestDriver server must be started first from the Terminal. Next, you need to choose the web browser you will use to run your JavaScript tests. You can run your tests in more than one browser but I imagine it will probably get annoying and cluttered. The JsTestDriver runner must be run from your Terminal to see if your tests are passing. With that understanding, let's move on to getting things set up.</p>
+
+<h2>Downloading JsTestDriver</h2>
+
+<p>If you have <a href="http://mxcl.github.io/homebrew/" title="Homebrew page">Homebrew</a> on your machine, you can run the command:</p>
+
+<p><code>
+$ brew install js-test-driver
+</code></p>
+
+<h2>Setting up your Environment</h2>
+
+<p>Installing via HomeBrew will install the JAR file in the directory: <code>/usr/local/Cellar/js-test-driver/1.3.5/libexec/</code>. You need to set the environment variable <code>JSTESTDRIVER_HOME</code> in your <code>.bash_profile</code> file:</p>
+
+<p><code>
+export JSTESTDRIVER_HOME=/usr/local/Cellar/js-test-driver/1.3.5/libexec
+</code></p>
+
+<h2>Configuring JsTestDriver</h2>
+
+<p>Before you run JsTestDriver, you need to specify a configuration file. The default filename that JsTestDriver recognizes is <code>jstestdriver.conf</code>. Here is what my configuration file looks like:</p>
+
+<p>```
+server: http://localhost:9876</p>
+
+<p>load:
+  - src/*.js</p>
+
+<p>test:
+  - test/*.js
+```</p>
+
+<p>This is a file written in <a href="http://www.yaml.org/">YAML</a> syntax. I specified a random port 9876 for our server. By default, JsTestDriver will listen on port 4224. Because I specified the <code>*</code> character, JsTestDriver will load all the source files from the <code>src</code> folder and test files from the <code>test</code> directory with a <code>.js</code> extension. Be sure to only use spaces in your configuration file; don't use tabs.</p>
+
+<h2>Running the JsTestDriver Server</h2>
+
+<p>To run JsTestDriver, you need to type this command in the Terminal:</p>
+
+<p><code>
+java -jar $JSTESTDRIVER_HOME/JsTestDriver-1.3.5.jar --port 9876
+</code></p>
+
+<p>We pass the JAR file to the <code>-jar</code> argument. In our case, the JsTestDriver file is located inside the directory we specified earlier. If you downloaded the JAR file elsewhere, you'll have to write out the correct path here.</p>
+
+<p>Next, you have to specify the same port you specified in your configuration file.</p>
+
+<h2>Selecting a Browser To Capture</h2>
+
+<p>In the web browser or browsers on which you want to run your tests, you need to type <code>http://localhost:9876</code> or whatever port number you decided to use. A page will load with two links as shown below. Choose the link to "Capture This Browser".</p>
+
+<p><img src="https://lh6.googleusercontent.com/-QL4n4uMiXGw/UYvvFK_B0FI/AAAAAAAAAOo/AE0KV4Lfh-I/w387-h242-no/jstestdriver_capture.png" alt="" /></p>
+
+<p>If all goes well, you should see a green band informing you of the state of the JsTestDriver server.</p>
+
+<p><img src="https://lh3.googleusercontent.com/-9hnWrJQKSls/UYvvIK5TYiI/AAAAAAAAAOw/pkmwON60Gx0/w515-h222-no/jstestdriver_waiting.png" alt="" /></p>
+
+<p>By the way, if you quit running the JsTestDriver server, the browser will inform you of its connection to the server. It will retry connecting to the server...</p>
+
+<p><img src="https://lh3.googleusercontent.com/-bBY7UiPtGDk/UYxEYS_slMI/AAAAAAAAAPY/K6HbTNrJslY/w533-h238-no/jstestdriver_retry.png" alt="" /></p>
+
+<p>... before it finally acknowledges that it is dead:</p>
+
+<p><img src="https://lh5.googleusercontent.com/-SvSuQxFSD5Y/UYxEWV5EsQI/AAAAAAAAAPQ/FjHbKktVf7Y/w470-h245-no/jstestdriver_dead.png" alt="" /></p>
+
+<p>One more thing: if you don't need to run your tests in the browser for whatever reason, you can skip this step of capturing the browser.</p>
+
+<h2>A Simple Test File</h2>
+
+<p>We are going to reuse the test spec shown on the JsTestDriver project page. We will call this file <code>greeter_test.js</code>:</p>
+
+<p>``` javascript
+// test/greeter_test.js</p>
+
+<p>GreeterTest = TestCase("GreeterTest");</p>
+
+<p>GreeterTest.prototype.testGreet = function() {</p>
+
+<pre><code>var greeter = new myapp.Greeter();
+assertEquals("Hello World!", greeter.greet("World"));
+</code></pre>
+
+<p>}
+```</p>
+
+<p>We also could have written it this way:
+``` javascript
+// test/greeter_test.js</p>
+
+<p>TestCase("GreeterTest",
+  "Testing a simple greet function": function() {</p>
+
+<pre><code>var greeter = new myapp.Greeter();
+assertEquals("Hello World!", greeter.greet("World"));
+</code></pre>
+
+<p>  }
+});
+```</p>
+
+<h2>Running the JsTestDriver Runner</h2>
+
+<p>At this point, we are ready to run the JsTestDriver runner and see the feedback we get. Our test should fail, and JsTestDriver confirms this when we run the command <code>java -jar $JSTESTDRIVER_HOME/JsTestDriver-1.3.5.jar --tests all</code>:</p>
+
+<p>```
+$ java -jar /usr/local/Cellar/js-test-driver/1.3.5/libexec/JsTestDriver-1.3.5.jar --tests all
+setting runnermode QUIET
+E
+Total 1 tests (Passed: 0; Fails: 0; Errors: 1) (1.00 ms)
+  Chrome 26.0.1410.65 Mac OS: Run 1 tests (Passed: 0; Fails: 0; Errors 1) (1.00 ms)</p>
+
+<pre><code>GreeterTest.testGreet error (1.00 ms): ReferenceError: myapp is not defined
+  ReferenceError: myapp is not defined
+      at GreeterTest.testGreet (http://localhost:9876/test/test/greeter_test.js:4:23)
+</code></pre>
+
+<p>```</p>
+
+<p>Then we write the code to make this test pass:</p>
+
+<p>``` javascript
+// src/greeter.js</p>
+
+<p>myapp = {}</p>
+
+<p>myapp.Greeter = function() { };</p>
+
+<p>myapp.Greeter.prototype.greet = function(name) {</p>
+
+<pre><code>return "Hello " + name + "!";
+</code></pre>
+
+<p>};
+```</p>
+
+<p>Now when you run the java command to run JsTestDriver, you will see your test passing:</p>
+
+<p><code>
+$ java -jar /usr/local/Cellar/js-test-driver/1.3.5/libexec/JsTestDriver-1.3.5.jar --tests all
+setting runnermode QUIET
+.
+Total 1 tests (Passed: 1; Fails: 0; Errors: 0) (0.00 ms)
+  Chrome 26.0.1410.65 Mac OS: Run 1 tests (Passed: 1; Fails: 0; Errors 0) (0.00 ms)
+</code></p>
+
+<h2>Jstdutil, a Ruby Wrapper</h2>
+
+<p>Tired of running the same Java command over and over? Christian Johansen wrote a Ruby wrapper to automate that task. You can find it on Github under the gem name <a href="https://github.com/cjohansen/jstdutil">jstdutil</a>.</p>
+
+<p>Let's include the gem in our Gemfile:</p>
+
+<p>``` ruby
+source "https://rubygems.org"</p>
+
+<p>group :test do
+  gem 'jstdutil'
+end
+```</p>
+
+<p>Now run <code>bundle install</code> to have bundler grab the gem.</p>
+
+<p>Remember to repeat the same process as when we ran the Java command by hand:</p>
+
+<ul>
+<li>Run the server in the background</li>
+<li>Capture the browser</li>
+<li>Run the runner</li>
+</ul>
+
+
+<p>To run the server in the background, we issue the command in the Terminal:</p>
+
+<p><code>
+$ bundle exec jstestdriver --port 9876
+</code></p>
+
+<p>Assuming you've captured the browser, you'll then want to run the runner:</p>
+
+<p><code>
+$ bundle exec jstestdriver --tests all
+</code></p>
+
+<p>The neat thing about using jstdutil is the colored output on the Terminal. The gem also comes with an autotesting feature. If you want to run the JsTestDriver runner every time the files change, use <code>jsautotest</code>:</p>
+
+<p><code>
+$ bundle exec jsautotest
+</code></p>
+
+<h2>Conclusion</h2>
+
+<p>I hope you now have a better understanding of how to use JsTestDriver. If you found it useful, share it on Twitter or your social networking platform of choice. I'd also love to hear your feedback. Write it below in the comments.</p>
+
+<p>I included a Pitfalls section below to address some common problems when trying to use JsTestDriver.</p>
+
+<h2>Pitfalls</h2>
+
+<h4>Invalid YAML</h4>
+
+<p>Make sure you have written valid YAML. You will get parsing errors if you use tabs in your YAML file. The error below occurred because I used tabs to indent before the <code>-</code> character when specifying the directories to load.</p>
+
+<p>```
+$ java -jar /usr/local/Cellar/js-test-driver/1.3.5/libexec/JsTestDriver-1.3.5.jar --port 9676
+while scanning for the next token
+found character     (9 that cannot start any token
+org.jvyaml.ScannerException: ScannerException while scanning for the next token we had this found character     (9 that cannot start any token</p>
+
+<pre><code>at org.jvyaml.ScannerImpl.fetchMoreTokens(ScannerImpl.java:359)
+at org.jvyaml.ScannerImpl.peekToken(ScannerImpl.java:160)
+at org.jvyaml.ParserImpl$21.produce(ParserImpl.java:410)
+at org.jvyaml.ParserImpl.parseStreamNext(ParserImpl.java:796)
+at org.jvyaml.ParserImpl.peekEvent(ParserImpl.java:747)
+at org.jvyaml.ComposerImpl.composeNode(ComposerImpl.java:106)
+at org.jvyaml.ComposerImpl.composeNode(ComposerImpl.java:168)
+at org.jvyaml.ComposerImpl.composeDocument(ComposerImpl.java:95)
+at org.jvyaml.ComposerImpl.getNode(ComposerImpl.java:71)
+at org.jvyaml.BaseConstructorImpl.getData(BaseConstructorImpl.java:88)
+at org.jvyaml.YAML.load(YAML.java:188)
+at org.jvyaml.YAML.load(YAML.java:165)
+at com.google.jstestdriver.config.YamlParser.parse(YamlParser.java:51)
+at com.google.jstestdriver.config.DefaultConfigurationSource.parse(DefaultConfigurationSource.java:56)
+at com.google.jstestdriver.embedded.JsTestDriverBuilder.setConfigurationSource(JsTestDriverBuilder.java:258)
+at com.google.jstestdriver.Main.main(Main.java:64)
+</code></pre>
+
+<p>Unexpected Runner Condition: ScannerException while scanning for the next token we had this found character     (9 that cannot start any token
+ Use --runnerMode DEBUG for more information.
+```</p>
+
+<h4>Conflicting Ports</h4>
+
+<p>Also make sure that you use the same port in the <code>--port</code> argument when you start the JsTestDriver server as the one you specified in your <code>.conf</code> file, otherwise you'll get an error about the server not being able to start. The error below occurred because I specified port 6666 in my configuration file but ran JsTestDriver with a different port.</p>
+
+<p>```
+$ java -jar /usr/local/Cellar/js-test-driver/1.3.5/libexec/JsTestDriver-1.3.5.jar --port 9876
+setting runnermode QUIET
+java.lang.RuntimeException: Connection error on: sun.net.www.protocol.http.HttpURLConnection:http://localhost:6666/jstd/gateway</p>
+
+<pre><code>at com.google.jstestdriver.HttpServer.postJson(HttpServer.java:162)
+at com.google.jstestdriver.action.ConfigureGatewayAction.run(ConfigureGatewayAction.java:70)
+at com.google.jstestdriver.ActionRunner.runActions(ActionRunner.java:81)
+at com.google.jstestdriver.embedded.JsTestDriverImpl.runConfigurationWithFlags(JsTestDriverImpl.java:342)
+at com.google.jstestdriver.embedded.JsTestDriverImpl.runConfiguration(JsTestDriverImpl.java:233)
+at com.google.jstestdriver.Main.main(Main.java:70)
+</code></pre>
+
+<p>Caused by: java.net.ConnectException: Connection refused</p>
+
+<pre><code>at java.net.PlainSocketImpl.socketConnect(Native Method)
+at java.net.PlainSocketImpl.doConnect(PlainSocketImpl.java:351)
+at java.net.PlainSocketImpl.connectToAddress(PlainSocketImpl.java:213)
+at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:200)
+at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:432)
+at java.net.Socket.connect(Socket.java:529)
+at java.net.Socket.connect(Socket.java:478)
+at sun.net.NetworkClient.doConnect(NetworkClient.java:163)
+at sun.net.www.http.HttpClient.openServer(HttpClient.java:388)
+at sun.net.www.http.HttpClient.openServer(HttpClient.java:523)
+at sun.net.www.http.HttpClient.&lt;init&gt;(HttpClient.java:227)
+at sun.net.www.http.HttpClient.New(HttpClient.java:300)
+at sun.net.www.http.HttpClient.New(HttpClient.java:317)
+at sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:970)
+at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:911)
+at sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:836)
+at sun.net.www.protocol.http.HttpURLConnection.getOutputStream(HttpURLConnection.java:1014)
+at com.google.jstestdriver.HttpServer.postJson(HttpServer.java:154)
+... 5 more
+</code></pre>
+
+<p>Unexpected Runner Condition: Connection error on: sun.net.www.protocol.http.HttpURLConnection:http://localhost:6666/jstd/gateway
+ Use --runnerMode DEBUG for more information.
+```</p>
+
+<h2>Sources</h2>
+
+<ol>
+<li>Getting Started, <a href="https://code.google.com/p/js-test-driver/wiki/GettingStarted">https://code.google.com/p/js-test-driver/wiki/GettingStarted</a></li>
+<li>Need Help with Error Message: java.lang.RuntimeException: Could not start browser CommandLineBrowserRunner <a href="https://groups.google.com/group/js-test-driver/browse_frm/month/2012-05?fwc=1&amp;pli=1">https://groups.google.com/group/js-test-driver/browse_frm/month/2012-05?fwc=1&amp;pli=1</a></li>
+<li>Jstdutil - A Ruby wrapper over JsTestDriver <a href="http://cjohansen.no/en/javascript/jstdutil_a_ruby_wrapper_over_jstestdriver">http://cjohansen.no/en/javascript/jstdutil_a_ruby_wrapper_over_jstestdriver</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

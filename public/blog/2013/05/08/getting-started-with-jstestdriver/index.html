@@ -1,0 +1,647 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Getting started with JsTestDriver - Daniel Dyba</title>
+  <meta name="author" content="Daniel Dyba">
+
+  
+  <meta name="description" content="While reading Test-Driven JavaScript Development by Christian Johansen, I decided to give Google&#8217;s JsTestDriver a spin. JsTestDriver is a &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://danieldyba.com/blog/2013/05/08/getting-started-with-jstestdriver">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Daniel Dyba" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Daniel Dyba</a></h1>
+  
+    <h2>Rails Developer, Passionate Independent Learner</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:danieldyba.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about/">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Getting Started With JsTestDriver</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-08T20:31:00-07:00" pubdate data-updated="true">May 8<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>While reading <a href="http://www.amazon.com/Test-Driven-JavaScript-Development-Developers-Library/dp/0321683919" title="Test-Driven JavaScript Development on Amazon"><em>Test-Driven JavaScript Development</em></a> by <a href="http://cjohansen.no/en" title="Christian Johansen's Blog">Christian Johansen</a>, I decided to give Google&#8217;s <a href="https://code.google.com/p/js-test-driver/" title="JsTestDriver Project Page on Google Code">JsTestDriver</a> a spin. JsTestDriver is a testing framework for JavaScript.</p>
+
+<h2>The 5,000 Foot View</h2>
+
+<p>There are three components involved when using JsTestDriver:</p>
+
+<ul>
+<li>The JsTestDriver server</li>
+<li>The Web Browser</li>
+<li>The JsTestDriver runner</li>
+</ul>
+
+
+<p>The JsTestDriver server must be started first from the Terminal. Next, you need to choose the web browser you will use to run your JavaScript tests. You can run your tests in more than one browser but I imagine it will probably get annoying and cluttered. The JsTestDriver runner must be run from your Terminal to see if your tests are passing. With that understanding, let&#8217;s move on to getting things set up.</p>
+
+<h2>Downloading JsTestDriver</h2>
+
+<p>If you have <a href="http://mxcl.github.io/homebrew/" title="Homebrew page">Homebrew</a> on your machine, you can run the command:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install js-test-driver</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Setting up your Environment</h2>
+
+<p>Installing via HomeBrew will install the JAR file in the directory: <code>/usr/local/Cellar/js-test-driver/1.3.5/libexec/</code>. You need to set the environment variable <code>JSTESTDRIVER_HOME</code> in your <code>.bash_profile</code> file:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>export JSTESTDRIVER_HOME=/usr/local/Cellar/js-test-driver/1.3.5/libexec</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Configuring JsTestDriver</h2>
+
+<p>Before you run JsTestDriver, you need to specify a configuration file. The default filename that JsTestDriver recognizes is <code>jstestdriver.conf</code>. Here is what my configuration file looks like:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>server: http://localhost:9876
+</span><span class='line'>
+</span><span class='line'>load:
+</span><span class='line'>  - src/*.js
+</span><span class='line'>
+</span><span class='line'>test:
+</span><span class='line'>  - test/*.js</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is a file written in <a href="http://www.yaml.org/">YAML</a> syntax. I specified a random port 9876 for our server. By default, JsTestDriver will listen on port 4224. Because I specified the <code>*</code> character, JsTestDriver will load all the source files from the <code>src</code> folder and test files from the <code>test</code> directory with a <code>.js</code> extension. Be sure to only use spaces in your configuration file; don&#8217;t use tabs.</p>
+
+<h2>Running the JsTestDriver Server</h2>
+
+<p>To run JsTestDriver, you need to type this command in the Terminal:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>java -jar $JSTESTDRIVER_HOME/JsTestDriver-1.3.5.jar --port 9876</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We pass the JAR file to the <code>-jar</code> argument. In our case, the JsTestDriver file is located inside the directory we specified earlier. If you downloaded the JAR file elsewhere, you&#8217;ll have to write out the correct path here.</p>
+
+<p>Next, you have to specify the same port you specified in your configuration file.</p>
+
+<h2>Selecting a Browser To Capture</h2>
+
+<p>In the web browser or browsers on which you want to run your tests, you need to type <code>http://localhost:9876</code> or whatever port number you decided to use. A page will load with two links as shown below. Choose the link to &#8220;Capture This Browser&#8221;.</p>
+
+<p><img src="https://lh6.googleusercontent.com/-QL4n4uMiXGw/UYvvFK_B0FI/AAAAAAAAAOo/AE0KV4Lfh-I/w387-h242-no/jstestdriver_capture.png" alt="" /></p>
+
+<p>If all goes well, you should see a green band informing you of the state of the JsTestDriver server.</p>
+
+<p><img src="https://lh3.googleusercontent.com/-9hnWrJQKSls/UYvvIK5TYiI/AAAAAAAAAOw/pkmwON60Gx0/w515-h222-no/jstestdriver_waiting.png" alt="" /></p>
+
+<p>By the way, if you quit running the JsTestDriver server, the browser will inform you of its connection to the server. It will retry connecting to the server&#8230;</p>
+
+<p><img src="https://lh3.googleusercontent.com/-bBY7UiPtGDk/UYxEYS_slMI/AAAAAAAAAPY/K6HbTNrJslY/w533-h238-no/jstestdriver_retry.png" alt="" /></p>
+
+<p>&#8230; before it finally acknowledges that it is dead:</p>
+
+<p><img src="https://lh5.googleusercontent.com/-SvSuQxFSD5Y/UYxEWV5EsQI/AAAAAAAAAPQ/FjHbKktVf7Y/w470-h245-no/jstestdriver_dead.png" alt="" /></p>
+
+<p>One more thing: if you don&#8217;t need to run your tests in the browser for whatever reason, you can skip this step of capturing the browser.</p>
+
+<h2>A Simple Test File</h2>
+
+<p>We are going to reuse the test spec shown on the JsTestDriver project page. We will call this file <code>greeter_test.js</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// test/greeter_test.js</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">GreeterTest</span> <span class="o">=</span> <span class="nx">TestCase</span><span class="p">(</span><span class="s2">&quot;GreeterTest&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">GreeterTest</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">testGreet</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">greeter</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">myapp</span><span class="p">.</span><span class="nx">Greeter</span><span class="p">();</span>
+</span><span class='line'>    <span class="nx">assertEquals</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">,</span> <span class="nx">greeter</span><span class="p">.</span><span class="nx">greet</span><span class="p">(</span><span class="s2">&quot;World&quot;</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We also could have written it this way:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// test/greeter_test.js</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">TestCase</span><span class="p">(</span><span class="s2">&quot;GreeterTest&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;Testing a simple greet function&quot;</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">greeter</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">myapp</span><span class="p">.</span><span class="nx">Greeter</span><span class="p">();</span>
+</span><span class='line'>    <span class="nx">assertEquals</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">,</span> <span class="nx">greeter</span><span class="p">.</span><span class="nx">greet</span><span class="p">(</span><span class="s2">&quot;World&quot;</span><span class="p">));</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Running the JsTestDriver Runner</h2>
+
+<p>At this point, we are ready to run the JsTestDriver runner and see the feedback we get. Our test should fail, and JsTestDriver confirms this when we run the command <code>java -jar $JSTESTDRIVER_HOME/JsTestDriver-1.3.5.jar --tests all</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span> <span class="nx">java</span> <span class="o">-</span><span class="nx">jar</span> <span class="o">/</span><span class="nx">usr</span><span class="o">/</span><span class="nx">local</span><span class="o">/</span><span class="nx">Cellar</span><span class="o">/</span><span class="nx">js</span><span class="o">-</span><span class="nx">test</span><span class="o">-</span><span class="nx">driver</span><span class="o">/</span><span class="mf">1.3</span><span class="p">.</span><span class="mi">5</span><span class="o">/</span><span class="nx">libexec</span><span class="o">/</span><span class="nx">JsTestDriver</span><span class="o">-</span><span class="mf">1.3</span><span class="p">.</span><span class="mi">5</span><span class="p">.</span><span class="nx">jar</span> <span class="o">--</span><span class="nx">tests</span> <span class="nx">all</span>
+</span><span class='line'><span class="nx">setting</span> <span class="nx">runnermode</span> <span class="nx">QUIET</span>
+</span><span class='line'><span class="nx">E</span>
+</span><span class='line'><span class="nx">Total</span> <span class="mi">1</span> <span class="nx">tests</span> <span class="p">(</span><span class="nx">Passed</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">Fails</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">Errors</span><span class="o">:</span> <span class="mi">1</span><span class="p">)</span> <span class="p">(</span><span class="mf">1.00</span> <span class="nx">ms</span><span class="p">)</span>
+</span><span class='line'>  <span class="nx">Chrome</span> <span class="mf">26.0</span><span class="p">.</span><span class="mf">1410.65</span> <span class="nx">Mac</span> <span class="nx">OS</span><span class="o">:</span> <span class="nx">Run</span> <span class="mi">1</span> <span class="nx">tests</span> <span class="p">(</span><span class="nx">Passed</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">Fails</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">Errors</span> <span class="mi">1</span><span class="p">)</span> <span class="p">(</span><span class="mf">1.00</span> <span class="nx">ms</span><span class="p">)</span>
+</span><span class='line'>    <span class="nx">GreeterTest</span><span class="p">.</span><span class="nx">testGreet</span> <span class="nx">error</span> <span class="p">(</span><span class="mf">1.00</span> <span class="nx">ms</span><span class="p">)</span><span class="o">:</span> <span class="nx">ReferenceError</span><span class="o">:</span> <span class="nx">myapp</span> <span class="nx">is</span> <span class="nx">not</span> <span class="nx">defined</span>
+</span><span class='line'>      <span class="nx">ReferenceError</span><span class="o">:</span> <span class="nx">myapp</span> <span class="nx">is</span> <span class="nx">not</span> <span class="nx">defined</span>
+</span><span class='line'>          <span class="nx">at</span> <span class="nx">GreeterTest</span><span class="p">.</span><span class="nx">testGreet</span> <span class="p">(</span><span class="nx">http</span><span class="o">:</span><span class="c1">//localhost:9876/test/test/greeter_test.js:4:23)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then we write the code to make this test pass:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// src/greeter.js</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">myapp</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">myapp</span><span class="p">.</span><span class="nx">Greeter</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">myapp</span><span class="p">.</span><span class="nx">Greeter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">greet</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s2">&quot;Hello &quot;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot;!&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now when you run the java command to run JsTestDriver, you will see your test passing:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span> <span class="nx">java</span> <span class="o">-</span><span class="nx">jar</span> <span class="o">/</span><span class="nx">usr</span><span class="o">/</span><span class="nx">local</span><span class="o">/</span><span class="nx">Cellar</span><span class="o">/</span><span class="nx">js</span><span class="o">-</span><span class="nx">test</span><span class="o">-</span><span class="nx">driver</span><span class="o">/</span><span class="mf">1.3</span><span class="p">.</span><span class="mi">5</span><span class="o">/</span><span class="nx">libexec</span><span class="o">/</span><span class="nx">JsTestDriver</span><span class="o">-</span><span class="mf">1.3</span><span class="p">.</span><span class="mi">5</span><span class="p">.</span><span class="nx">jar</span> <span class="o">--</span><span class="nx">tests</span> <span class="nx">all</span>
+</span><span class='line'><span class="nx">setting</span> <span class="nx">runnermode</span> <span class="nx">QUIET</span>
+</span><span class='line'><span class="p">.</span>
+</span><span class='line'><span class="nx">Total</span> <span class="mi">1</span> <span class="nx">tests</span> <span class="p">(</span><span class="nx">Passed</span><span class="o">:</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">Fails</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">Errors</span><span class="o">:</span> <span class="mi">0</span><span class="p">)</span> <span class="p">(</span><span class="mf">0.00</span> <span class="nx">ms</span><span class="p">)</span>
+</span><span class='line'>  <span class="nx">Chrome</span> <span class="mf">26.0</span><span class="p">.</span><span class="mf">1410.65</span> <span class="nx">Mac</span> <span class="nx">OS</span><span class="o">:</span> <span class="nx">Run</span> <span class="mi">1</span> <span class="nx">tests</span> <span class="p">(</span><span class="nx">Passed</span><span class="o">:</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">Fails</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">Errors</span> <span class="mi">0</span><span class="p">)</span> <span class="p">(</span><span class="mf">0.00</span> <span class="nx">ms</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Jstdutil, a Ruby Wrapper</h2>
+
+<p>Tired of running the same Java command over and over? Christian Johansen wrote a Ruby wrapper to automate that task. You can find it on Github under the gem name <a href="https://github.com/cjohansen/jstdutil">jstdutil</a>.</p>
+
+<p>Let&#8217;s include the gem in our Gemfile:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">source</span> <span class="s2">&quot;https://rubygems.org&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">group</span> <span class="ss">:test</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;jstdutil&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now run <code>bundle install</code> to have bundler grab the gem.</p>
+
+<p>Remember to repeat the same process as when we ran the Java command by hand:</p>
+
+<ul>
+<li>Run the server in the background</li>
+<li>Capture the browser</li>
+<li>Run the runner</li>
+</ul>
+
+
+<p>To run the server in the background, we issue the command in the Terminal:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="err">$</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">jstestdriver</span> <span class="o">--</span><span class="n">port</span> <span class="mi">9876</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Assuming you&#8217;ve captured the browser, you&#8217;ll then want to run the runner:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="err">$</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">jstestdriver</span> <span class="o">--</span><span class="n">tests</span> <span class="n">all</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The neat thing about using jstdutil is the colored output on the Terminal. The gem also comes with an autotesting feature. If you want to run the JsTestDriver runner every time the files change, use <code>jsautotest</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="err">$</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">jsautotest</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Conclusion</h2>
+
+<p>I hope you now have a better understanding of how to use JsTestDriver. If you found it useful, share it on Twitter or your social networking platform of choice. I&#8217;d also love to hear your feedback. Write it below in the comments.</p>
+
+<p>I included a Pitfalls section below to address some common problems when trying to use JsTestDriver.</p>
+
+<h2>Pitfalls</h2>
+
+<h4>Invalid YAML</h4>
+
+<p>Make sure you have written valid YAML. You will get parsing errors if you use tabs in your YAML file. The error below occurred because I used tabs to indent before the <code>-</code> character when specifying the directories to load.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="err">$</span> <span class="n">java</span> <span class="o">-</span><span class="n">jar</span> <span class="sr">/usr/</span><span class="n">local</span><span class="o">/</span><span class="no">Cellar</span><span class="o">/</span><span class="n">js</span><span class="o">-</span><span class="nb">test</span><span class="o">-</span><span class="n">driver</span><span class="o">/</span><span class="mi">1</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="o">/</span><span class="n">libexec</span><span class="o">/</span><span class="no">JsTestDriver</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="o">.</span><span class="n">jar</span> <span class="o">--</span><span class="n">port</span> <span class="mi">9676</span>
+</span><span class='line'><span class="k">while</span> <span class="n">scanning</span> <span class="k">for</span> <span class="n">the</span> <span class="k">next</span> <span class="n">token</span>
+</span><span class='line'><span class="n">found</span> <span class="n">character</span>     <span class="p">(</span><span class="mi">9</span> <span class="n">that</span> <span class="n">cannot</span> <span class="n">start</span> <span class="n">any</span> <span class="n">token</span>
+</span><span class='line'><span class="n">org</span><span class="o">.</span><span class="n">jvyaml</span><span class="o">.</span><span class="n">ScannerException</span><span class="p">:</span> <span class="no">ScannerException</span> <span class="k">while</span> <span class="n">scanning</span> <span class="k">for</span> <span class="n">the</span> <span class="k">next</span> <span class="n">token</span> <span class="n">we</span> <span class="n">had</span> <span class="n">this</span> <span class="n">found</span> <span class="n">character</span>    <span class="p">(</span><span class="mi">9</span> <span class="n">that</span> <span class="n">cannot</span> <span class="n">start</span> <span class="n">any</span> <span class="n">token</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="n">jvyaml</span><span class="o">.</span><span class="n">ScannerImpl</span><span class="o">.</span><span class="n">fetchMoreTokens</span><span class="p">(</span><span class="no">ScannerImpl</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">359</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="n">jvyaml</span><span class="o">.</span><span class="n">ScannerImpl</span><span class="o">.</span><span class="n">peekToken</span><span class="p">(</span><span class="no">ScannerImpl</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">160</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="n">jvyaml</span><span class="o">.</span><span class="n">ParserImpl</span><span class="vg">$21</span><span class="o">.</span><span class="n">produce</span><span class="p">(</span><span class="no">ParserImpl</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">410</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="n">jvyaml</span><span class="o">.</span><span class="n">ParserImpl</span><span class="o">.</span><span class="n">parseStreamNext</span><span class="p">(</span><span class="no">ParserImpl</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">796</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="n">jvyaml</span><span class="o">.</span><span class="n">ParserImpl</span><span class="o">.</span><span class="n">peekEvent</span><span class="p">(</span><span class="no">ParserImpl</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">747</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="n">jvyaml</span><span class="o">.</span><span class="n">ComposerImpl</span><span class="o">.</span><span class="n">composeNode</span><span class="p">(</span><span class="no">ComposerImpl</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">106</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="n">jvyaml</span><span class="o">.</span><span class="n">ComposerImpl</span><span class="o">.</span><span class="n">composeNode</span><span class="p">(</span><span class="no">ComposerImpl</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">168</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="n">jvyaml</span><span class="o">.</span><span class="n">ComposerImpl</span><span class="o">.</span><span class="n">composeDocument</span><span class="p">(</span><span class="no">ComposerImpl</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">95</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="n">jvyaml</span><span class="o">.</span><span class="n">ComposerImpl</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="no">ComposerImpl</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">71</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="n">jvyaml</span><span class="o">.</span><span class="n">BaseConstructorImpl</span><span class="o">.</span><span class="n">getData</span><span class="p">(</span><span class="no">BaseConstructorImpl</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">88</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="n">jvyaml</span><span class="o">.</span><span class="n">YAML</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="no">YAML</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">188</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="n">jvyaml</span><span class="o">.</span><span class="n">YAML</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="no">YAML</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">165</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">jstestdriver</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">YamlParser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="no">YamlParser</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">51</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">jstestdriver</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">DefaultConfigurationSource</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="no">DefaultConfigurationSource</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">56</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">jstestdriver</span><span class="o">.</span><span class="n">embedded</span><span class="o">.</span><span class="n">JsTestDriverBuilder</span><span class="o">.</span><span class="n">setConfigurationSource</span><span class="p">(</span><span class="no">JsTestDriverBuilder</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">258</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">jstestdriver</span><span class="o">.</span><span class="n">Main</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="no">Main</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">64</span><span class="p">)</span>
+</span><span class='line'><span class="no">Unexpected</span> <span class="no">Runner</span> <span class="ss">Condition</span><span class="p">:</span> <span class="no">ScannerException</span> <span class="k">while</span> <span class="n">scanning</span> <span class="k">for</span> <span class="n">the</span> <span class="k">next</span> <span class="n">token</span> <span class="n">we</span> <span class="n">had</span> <span class="n">this</span> <span class="n">found</span> <span class="n">character</span>   <span class="p">(</span><span class="mi">9</span> <span class="n">that</span> <span class="n">cannot</span> <span class="n">start</span> <span class="n">any</span> <span class="n">token</span>
+</span><span class='line'> <span class="no">Use</span> <span class="o">--</span><span class="n">runnerMode</span> <span class="no">DEBUG</span> <span class="k">for</span> <span class="n">more</span> <span class="n">information</span><span class="o">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Conflicting Ports</h4>
+
+<p>Also make sure that you use the same port in the <code>--port</code> argument when you start the JsTestDriver server as the one you specified in your <code>.conf</code> file, otherwise you&#8217;ll get an error about the server not being able to start. The error below occurred because I specified port 6666 in my configuration file but ran JsTestDriver with a different port.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="err">$</span> <span class="n">java</span> <span class="o">-</span><span class="n">jar</span> <span class="sr">/usr/</span><span class="n">local</span><span class="o">/</span><span class="no">Cellar</span><span class="o">/</span><span class="n">js</span><span class="o">-</span><span class="nb">test</span><span class="o">-</span><span class="n">driver</span><span class="o">/</span><span class="mi">1</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="o">/</span><span class="n">libexec</span><span class="o">/</span><span class="no">JsTestDriver</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="o">.</span><span class="n">jar</span> <span class="o">--</span><span class="n">port</span> <span class="mi">9876</span>
+</span><span class='line'><span class="n">setting</span> <span class="n">runnermode</span> <span class="no">QUIET</span>
+</span><span class='line'><span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">RuntimeException</span><span class="p">:</span> <span class="no">Connection</span> <span class="n">error</span> <span class="ss">on</span><span class="p">:</span> <span class="n">sun</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">www</span><span class="o">.</span><span class="n">protocol</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">HttpURLConnection</span><span class="ss">:http:/</span><span class="o">/</span><span class="ss">localhost</span><span class="p">:</span><span class="mi">6666</span><span class="o">/</span><span class="n">jstd</span><span class="o">/</span><span class="n">gateway</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">jstestdriver</span><span class="o">.</span><span class="n">HttpServer</span><span class="o">.</span><span class="n">postJson</span><span class="p">(</span><span class="no">HttpServer</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">162</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">jstestdriver</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">ConfigureGatewayAction</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="no">ConfigureGatewayAction</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">70</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">jstestdriver</span><span class="o">.</span><span class="n">ActionRunner</span><span class="o">.</span><span class="n">runActions</span><span class="p">(</span><span class="no">ActionRunner</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">81</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">jstestdriver</span><span class="o">.</span><span class="n">embedded</span><span class="o">.</span><span class="n">JsTestDriverImpl</span><span class="o">.</span><span class="n">runConfigurationWithFlags</span><span class="p">(</span><span class="no">JsTestDriverImpl</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">342</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">jstestdriver</span><span class="o">.</span><span class="n">embedded</span><span class="o">.</span><span class="n">JsTestDriverImpl</span><span class="o">.</span><span class="n">runConfiguration</span><span class="p">(</span><span class="no">JsTestDriverImpl</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">233</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">jstestdriver</span><span class="o">.</span><span class="n">Main</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="no">Main</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">70</span><span class="p">)</span>
+</span><span class='line'><span class="no">Caused</span> <span class="ss">by</span><span class="p">:</span> <span class="n">java</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">ConnectException</span><span class="p">:</span> <span class="no">Connection</span> <span class="n">refused</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">java</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">PlainSocketImpl</span><span class="o">.</span><span class="n">socketConnect</span><span class="p">(</span><span class="no">Native</span> <span class="no">Method</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">java</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">PlainSocketImpl</span><span class="o">.</span><span class="n">doConnect</span><span class="p">(</span><span class="no">PlainSocketImpl</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">351</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">java</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">PlainSocketImpl</span><span class="o">.</span><span class="n">connectToAddress</span><span class="p">(</span><span class="no">PlainSocketImpl</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">213</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">java</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">PlainSocketImpl</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="no">PlainSocketImpl</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">200</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">java</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">SocksSocketImpl</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="no">SocksSocketImpl</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">432</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">java</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">Socket</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="no">Socket</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">529</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">java</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">Socket</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="no">Socket</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">478</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">sun</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">NetworkClient</span><span class="o">.</span><span class="n">doConnect</span><span class="p">(</span><span class="no">NetworkClient</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">163</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">sun</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">www</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">HttpClient</span><span class="o">.</span><span class="n">openServer</span><span class="p">(</span><span class="no">HttpClient</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">388</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">sun</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">www</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">HttpClient</span><span class="o">.</span><span class="n">openServer</span><span class="p">(</span><span class="no">HttpClient</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">523</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">sun</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">www</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">HttpClient</span><span class="o">.</span><span class="n">&lt;init</span><span class="o">&gt;</span><span class="p">(</span><span class="no">HttpClient</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">227</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">sun</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">www</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">HttpClient</span><span class="o">.</span><span class="n">New</span><span class="p">(</span><span class="no">HttpClient</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">300</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">sun</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">www</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">HttpClient</span><span class="o">.</span><span class="n">New</span><span class="p">(</span><span class="no">HttpClient</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">317</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">sun</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">www</span><span class="o">.</span><span class="n">protocol</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">HttpURLConnection</span><span class="o">.</span><span class="n">getNewHttpClient</span><span class="p">(</span><span class="no">HttpURLConnection</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">970</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">sun</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">www</span><span class="o">.</span><span class="n">protocol</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">HttpURLConnection</span><span class="o">.</span><span class="n">plainConnect</span><span class="p">(</span><span class="no">HttpURLConnection</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">911</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">sun</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">www</span><span class="o">.</span><span class="n">protocol</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">HttpURLConnection</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="no">HttpURLConnection</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">836</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">sun</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">www</span><span class="o">.</span><span class="n">protocol</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">HttpURLConnection</span><span class="o">.</span><span class="n">getOutputStream</span><span class="p">(</span><span class="no">HttpURLConnection</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">1014</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">jstestdriver</span><span class="o">.</span><span class="n">HttpServer</span><span class="o">.</span><span class="n">postJson</span><span class="p">(</span><span class="no">HttpServer</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">154</span><span class="p">)</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="mi">5</span> <span class="n">more</span>
+</span><span class='line'><span class="no">Unexpected</span> <span class="no">Runner</span> <span class="ss">Condition</span><span class="p">:</span> <span class="no">Connection</span> <span class="n">error</span> <span class="ss">on</span><span class="p">:</span> <span class="n">sun</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">www</span><span class="o">.</span><span class="n">protocol</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">HttpURLConnection</span><span class="ss">:http:/</span><span class="o">/</span><span class="ss">localhost</span><span class="p">:</span><span class="mi">6666</span><span class="o">/</span><span class="n">jstd</span><span class="o">/</span><span class="n">gateway</span>
+</span><span class='line'> <span class="no">Use</span> <span class="o">--</span><span class="n">runnerMode</span> <span class="no">DEBUG</span> <span class="k">for</span> <span class="n">more</span> <span class="n">information</span><span class="o">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Sources</h2>
+
+<ol>
+<li>Getting Started, <a href="https://code.google.com/p/js-test-driver/wiki/GettingStarted">https://code.google.com/p/js-test-driver/wiki/GettingStarted</a></li>
+<li>Need Help with Error Message: java.lang.RuntimeException: Could not start browser CommandLineBrowserRunner <a href="https://groups.google.com/group/js-test-driver/browse_frm/month/2012-05?fwc=1&amp;pli=1">https://groups.google.com/group/js-test-driver/browse_frm/month/2012-05?fwc=1&amp;pli=1</a></li>
+<li>Jstdutil - A Ruby wrapper over JsTestDriver <a href="http://cjohansen.no/en/javascript/jstdutil_a_ruby_wrapper_over_jstestdriver">http://cjohansen.no/en/javascript/jstdutil_a_ruby_wrapper_over_jstestdriver</a></li>
+</ol>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Daniel Dyba</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-08T20:31:00-07:00" pubdate data-updated="true">May 8<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/test-driven-development/'>Test Driven Development</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://danieldyba.com/blog/2013/05/08/getting-started-with-jstestdriver/" data-via="dyba" data-counturl="http://danieldyba.com/blog/2013/05/08/getting-started-with-jstestdriver/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/01/19/writing-my-first-usage-narrative/" title="Previous Post: Writing My First Usage Narrative">&laquo; Writing My First Usage Narrative</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/08/getting-started-with-jstestdriver/">Getting started with JsTestDriver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/19/writing-my-first-usage-narrative/">Writing My First Usage Narrative</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/25/code-kata-4-a-tdd-attempt-toward-readable-code/">Code Kata 4: A TDD Attempt Toward Readable Code</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/23/string-calculator-kata-without-if/">String Calculator Kata Without If, Else, Switch, or Case</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/15/ruby-monk-problem-capitalizing-an-array-with-names-revisited/">Ruby Monk Problem - Capitalizing an Array With Names (Revisited)</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/dyba">@dyba</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'dyba',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Daniel Dyba -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'danieldyba';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://danieldyba.com/blog/2013/05/08/getting-started-with-jstestdriver/';
+        var disqus_url = 'http://danieldyba.com/blog/2013/05/08/getting-started-with-jstestdriver/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
