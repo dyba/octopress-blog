@@ -3,7 +3,6 @@ layout: post
 title: "Getting started with JsTestDriver"
 date: 2013-05-08 20:31
 comments: true
-published: false
 categories: [JavaScript, Test Driven Development]
 ---
 While reading [_Test-Driven JavaScript Development_] [1] by [Christian Johansen] [2], I decided to give Google's [JsTestDriver] [3] a spin. JsTestDriver is a testing framework for JavaScript.
