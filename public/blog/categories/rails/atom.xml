@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Rails | Daniel Dyba]]></title>
+  <title><![CDATA[Category: rails | Daniel Dyba]]></title>
   <link href="http://danieldyba.com/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://danieldyba.com/"/>
-  <updated>2013-05-09T21:43:14-07:00</updated>
+  <updated>2014-10-16T21:52:57-07:00</updated>
   <id>http://danieldyba.com/</id>
   <author>
     <name><![CDATA[Daniel Dyba]]></name>
@@ -20,43 +20,36 @@
     <id>http://danieldyba.com/blog/2011/10/16/using-bundle-install-in-a-rails-3-generator</id>
     <content type="html"><![CDATA[<h3>Problem</h3>
 
-<p>I came across Rails issue <a href="https://github.com/rails/rails/issues/3153">#3153</a> on Github which involved someone thinking <code>bundle install</code> didn't work with Rails generators.</p>
+<p>I came across Rails issue <a href="https://github.com/rails/rails/issues/3153">#3153</a> on Github which involved someone thinking <code>bundle install</code> didn&rsquo;t work with Rails generators.</p>
 
-<p>When working with Rails generators it's important to remember that generators use Yehuda Katz's Thor gem. The issue arose because the user tried to run the command <code>bundle install</code> from inside the directory in which the generator file had been created.</p>
+<p>When working with Rails generators it&rsquo;s important to remember that generators use Yehuda Katz&rsquo;s Thor gem. The issue arose because the user tried to run the command <code>bundle install</code> from inside the directory in which the generator file had been created.</p>
 
-<p>```ruby
-class SomegenGenerator &lt; Rails::Generators::Base
- source_root File.expand_path('../templates', <strong>FILE</strong>)</p>
+<pre><code class="ruby">class SomegenGenerator &lt; Rails::Generators::Base
+ source_root File.expand_path('../templates', __FILE__)
 
-<p> def install
+ def install
    gem "unicorn"
    run "bundle install"
  end
 end
-```</p>
+</code></pre>
 
 <h3>Solution</h3>
 
-<p>Again, the issue is that the command <code>bundle install</code> is being run from inside the directory <code>Issue3153/lib/generators/something/</code>. I'll let you take a quick look at the Thor source code at <a href="https://github.com/wycats/thor/blob/master/lib/thor/actions.rb#L161">lib/thor/actions.rb</a>. As you have now seen, we can use the <code>inside</code> method to run the <code>bundle install</code> command from the root directory of our app Issue3153.</p>
+<p>Again, the issue is that the command <code>bundle install</code> is being run from inside the directory <code>Issue3153/lib/generators/something/</code>. I&rsquo;ll let you take a quick look at the Thor source code at <a href="https://github.com/wycats/thor/blob/master/lib/thor/actions.rb#L161">lib/thor/actions.rb</a>. As you have now seen, we can use the <code>inside</code> method to run the <code>bundle install</code> command from the root directory of our app Issue3153.</p>
 
-<p>```ruby</p>
+<pre><code class="ruby "># Issue3153/lib/generators/something/something_generator.rb
+class SomethingGenerator &lt; Rails::Generators::Base
+  source_root File.expand_path('../templates', __FILE__)
 
-<h1>Issue3153/lib/generators/something/something_generator.rb</h1>
-
-<p>class SomethingGenerator &lt; Rails::Generators::Base
-  source_root File.expand_path('../templates', <strong>FILE</strong>)</p>
-
-<p>  def install</p>
-
-<pre><code>gem "unicorn"
-inside Rails.root do
-  run "bundle install"
+  def install
+    gem "unicorn"
+    inside Rails.root do
+      run "bundle install"
+    end
+  end
 end
 </code></pre>
-
-<p>  end
-end
-```</p>
 
 <p>This now works!</p>
 

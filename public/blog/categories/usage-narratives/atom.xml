@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Usage Narratives | Daniel Dyba]]></title>
+  <title><![CDATA[Category: usage narratives | Daniel Dyba]]></title>
   <link href="http://danieldyba.com/blog/categories/usage-narratives/atom.xml" rel="self"/>
   <link href="http://danieldyba.com/"/>
-  <updated>2013-05-09T21:43:14-07:00</updated>
+  <updated>2014-10-16T21:52:57-07:00</updated>
   <id>http://danieldyba.com/</id>
   <author>
     <name><![CDATA[Daniel Dyba]]></name>
@@ -18,11 +18,11 @@
     <link href="http://danieldyba.com/blog/2012/01/19/writing-my-first-usage-narrative/"/>
     <updated>2012-01-19T12:19:00-08:00</updated>
     <id>http://danieldyba.com/blog/2012/01/19/writing-my-first-usage-narrative</id>
-    <content type="html"><![CDATA[<p>In an effort to understand the analysis and design of object-oriented systems, I picked up a book by Alistair Cockburn (pronounced COH-burn) called <em>Writing Effective Use Cases</em>. Building object-oriented systems can become quite complex. If you haven't thoroughly analyzed how your system is supposed to work, you may come to wonder whether or not you are meeting the needs of the stakeholders. This is where use cases come in to play. According to Cockburn, a use case "captures a contract between the stakeholders of a system about its behavior" (Cockburn 1).  But if you've never written a use case before, you might wonder how you would begin. This is where usage narratives come in to play.</p>
+    <content type="html"><![CDATA[<p>In an effort to understand the analysis and design of object-oriented systems, I picked up a book by Alistair Cockburn (pronounced COH-burn) called <em>Writing Effective Use Cases</em>. Building object-oriented systems can become quite complex. If you haven&rsquo;t thoroughly analyzed how your system is supposed to work, you may come to wonder whether or not you are meeting the needs of the stakeholders. This is where use cases come in to play. According to Cockburn, a use case &ldquo;captures a contract between the stakeholders of a system about its behavior&rdquo; (Cockburn 1).  But if you&rsquo;ve never written a use case before, you might wonder how you would begin. This is where usage narratives come in to play.</p>
 
 <h2>Usage Narratives: Catalysts for Writing Use Cases</h2>
 
-<p>Toward the end of the first chapter, Cockburn talks about writing usage narratives as a way to warm up prior to writing use cases. Usage narratives are stories. It is a story with a specific actor/actress in mind. When I say actor/actress (for simplicity, 'actor'), I mean the main character of the story who will use the system you are designing. To keep the reader engaged in the usage narrative, it helps to be very specific with your actor and to add just enough details to paint a picture of who the actor is. A usage narrative will help you see how your system will be used. It will put you in the right mode of thinking to delve deeper if needed when you write your use cases.</p>
+<p>Toward the end of the first chapter, Cockburn talks about writing usage narratives as a way to warm up prior to writing use cases. Usage narratives are stories. It is a story with a specific actor/actress in mind. When I say actor/actress (for simplicity, &lsquo;actor&rsquo;), I mean the main character of the story who will use the system you are designing. To keep the reader engaged in the usage narrative, it helps to be very specific with your actor and to add just enough details to paint a picture of who the actor is. A usage narrative will help you see how your system will be used. It will put you in the right mode of thinking to delve deeper if needed when you write your use cases.</p>
 
 <p>One of the exercises in the chapter asks you to write a usage narrative for the ATM you use. Here is my first run at it:</p>
 
@@ -30,42 +30,42 @@
 
 <p><strong>Usage Narrative: Withdraw Cash</strong></p>
 
-<p>Daniel, a 27-year-old absent-minded engineer who keeps track of his expenditures by saving every receipt, walks up to the ATM. He slides his card in the ATM. He selects "Withdraw Cash". He selects the amount $100. When prompted by the system to finish his transaction, he selects "Yes". The system asks if he would like a receipt. He selects "Yes". The ATM prints out a receipt. Next, the ATM alerts Daniel that it has ejected his card to avoid having him forget to retrieve it. Daniel takes his card and heads home.</p>
+<p>Daniel, a 27-year-old absent-minded engineer who keeps track of his expenditures by saving every receipt, walks up to the ATM. He slides his card in the ATM. He selects &ldquo;Withdraw Cash&rdquo;. He selects the amount $100. When prompted by the system to finish his transaction, he selects &ldquo;Yes&rdquo;. The system asks if he would like a receipt. He selects &ldquo;Yes&rdquo;. The ATM prints out a receipt. Next, the ATM alerts Daniel that it has ejected his card to avoid having him forget to retrieve it. Daniel takes his card and heads home.</p>
 
 <hr />
 
-<p>Then, I read Cockburn's example:</p>
+<p>Then, I read Cockburn&rsquo;s example:</p>
 
 <hr />
 
-<p><strong>Usage Narrative: Getting "Fash Cash"</strong></p>
+<p><strong>Usage Narrative: Getting &ldquo;Fash Cash&rdquo;</strong></p>
 
-<p>Mary, taking her two daughters to the day care center on the way to work, drives up to the ATM, runs her card across the card reader, enters her PIN code, selects FAST CASH, and enters $35 as the amount. The ATM issues a $20 and three $5 bills, plus a receipt showing her account balance after the $35 is debited. The ATM resets its screens after each transaction with FAST CASH, so Mary can drive away and not worry that the next driver will have access to her account. Mary likes FAST CASH because it avoid the many questions that slow down the interaction. She comes to this particular ATM because it issues $5 bills, which she uses to pay the day care provider, and she doesn't have to get out of her car to use it. (Cockburn 18)</p>
+<p>Mary, taking her two daughters to the day care center on the way to work, drives up to the ATM, runs her card across the card reader, enters her PIN code, selects FAST CASH, and enters $35 as the amount. The ATM issues a $20 and three $5 bills, plus a receipt showing her account balance after the $35 is debited. The ATM resets its screens after each transaction with FAST CASH, so Mary can drive away and not worry that the next driver will have access to her account. Mary likes FAST CASH because it avoid the many questions that slow down the interaction. She comes to this particular ATM because it issues $5 bills, which she uses to pay the day care provider, and she doesn&rsquo;t have to get out of her car to use it. (Cockburn 18)</p>
 
 <hr />
 
-<p>After reading his example, I thought: I never got my money! Only after having read his example and then read mine did I notice that my ATM machine never dispensed the $100 I requested! I thought it funny that I described myself as absent-minded before noticing I had forgot to pick up my money from the ATM. I probably revealed more than I had wanted in this example. There's nothing wrong about the way I wrote my usage narrative; however, I missed some important details. This isn't a bad thing especially since I realized this quickly enough. The key is that I recognized what was missing upon reading it.</p>
+<p>After reading his example, I thought: I never got my money! Only after having read his example and then read mine did I notice that my ATM machine never dispensed the $100 I requested! I thought it funny that I described myself as absent-minded before noticing I had forgot to pick up my money from the ATM. I probably revealed more than I had wanted in this example. There&rsquo;s nothing wrong about the way I wrote my usage narrative; however, I missed some important details. This isn&rsquo;t a bad thing especially since I realized this quickly enough. The key is that I recognized what was missing upon reading it.</p>
 
 <h2>Comparing and Contrasting</h2>
 
-<p>Let's take a closer look at how I could have improved my usage narrative.</p>
+<p>Let&rsquo;s take a closer look at how I could have improved my usage narrative.</p>
 
-<p>To start off, I could have been more specific with the amount of money I received from the ATM. I probably don't want to get back a $100 bill. I would rather get $20 bills because it is more likely I will get change easily. Another thing I could have done is elaborate on how this ATM provides <em>value</em> to me. I noticed that Cockburn's example mentions three key reasons why this ATM has value to Mary:</p>
+<p>To start off, I could have been more specific with the amount of money I received from the ATM. I probably don&rsquo;t want to get back a $100 bill. I would rather get $20 bills because it is more likely I will get change easily. Another thing I could have done is elaborate on how this ATM provides <em>value</em> to me. I noticed that Cockburn&rsquo;s example mentions three key reasons why this ATM has value to Mary:</p>
 
 <ol>
 <li>It issues $5 bills. Mary can use the $5 bills to pay the day care provider.</li>
-<li>It is accessible. She doesn't have to get out of her car and walk up to it. She can use it from the driver's seat of a vehicle.</li>
+<li>It is accessible. She doesn&rsquo;t have to get out of her car and walk up to it. She can use it from the driver&rsquo;s seat of a vehicle.</li>
 <li>It dispenses cash quickly. The ATM has a FAST CASH feature that make withdrawals a snap.</li>
 </ol>
 
 
-<p>My usage narrative did include one reason how this ATM provides value to me although it wasn't made as clear as Cockburn's example. I described myself as being absent-minded and one who collects every receipt in order to track my expenditures. This particular ATM does provide a receipt printout which is exactly the feature that meets my needs.</p>
+<p>My usage narrative did include one reason how this ATM provides value to me although it wasn&rsquo;t made as clear as Cockburn&rsquo;s example. I described myself as being absent-minded and one who collects every receipt in order to track my expenditures. This particular ATM does provide a receipt printout which is exactly the feature that meets my needs.</p>
 
-<p>I tried to be specific with the character I used in my example. In particular, because I noted my actor as being absent-minded, it became clear that the ATM needed to have a feature that reminded the actor to retrieve their card after dispensing cash. In that respect, my example is comparable in quality to the detailed description of the actor in Cockburn's example. Since I noted this ATM reminds its users to retrieve their card, one can argue that I implicitly demonstrated the value of the ATM in my example: by alerting the user when the transaction is complete, the ATM reminds the user to not forget their card at the ATM.</p>
+<p>I tried to be specific with the character I used in my example. In particular, because I noted my actor as being absent-minded, it became clear that the ATM needed to have a feature that reminded the actor to retrieve their card after dispensing cash. In that respect, my example is comparable in quality to the detailed description of the actor in Cockburn&rsquo;s example. Since I noted this ATM reminds its users to retrieve their card, one can argue that I implicitly demonstrated the value of the ATM in my example: by alerting the user when the transaction is complete, the ATM reminds the user to not forget their card at the ATM.</p>
 
 <h2>Essential Elements of a Usage Narrative</h2>
 
-<p>Now that you've had a chance to look at what a usage narrative looks like, I will wrap up with the elements that are essential to writing a usage narrative according to Cockburn. A usage narrative must be brief in order for the reader to comprehend it easily. It must capture the mental state of the actor who will be using the system, that is, "why he wants what he wants or what conditions drive him to act as he does" (Cockburn 18). He goes on to say that "details and motives, or emotional content, are important so that every reader… can see how the system should be optimized to add value to the user" (Cockburn 18). Thus, a usage narrative must:</p>
+<p>Now that you&rsquo;ve had a chance to look at what a usage narrative looks like, I will wrap up with the elements that are essential to writing a usage narrative according to Cockburn. A usage narrative must be brief in order for the reader to comprehend it easily. It must capture the mental state of the actor who will be using the system, that is, &ldquo;why he wants what he wants or what conditions drive him to act as he does&rdquo; (Cockburn 18). He goes on to say that &ldquo;details and motives, or emotional content, are important so that every reader… can see how the system should be optimized to add value to the user&rdquo; (Cockburn 18). Thus, a usage narrative must:</p>
 
 <ul>
 <li>Be brief</li>
@@ -74,7 +74,7 @@
 </ul>
 
 
-<p>Combining the above elements in a usage narrative will help you see the system in use. Cockburn also reminds us that "the narrative is not the requirements; rather, it sets the stage for more detailed and generalized descriptions of the requirements" (Cockburn 18).</p>
+<p>Combining the above elements in a usage narrative will help you see the system in use. Cockburn also reminds us that &ldquo;the narrative is not the requirements; rather, it sets the stage for more detailed and generalized descriptions of the requirements&rdquo; (Cockburn 18).</p>
 
 <h2>Your Turn</h2>
 
